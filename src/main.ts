@@ -1,56 +1,31 @@
-import * as Phaser from "phaser";
+import * as Phaser from 'phaser';
+import GameScene from './scenes/GameScene';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
   active: false,
   visible: false,
-  key: "Game"
+  key: 'Game',
 };
 
-export class GameScene extends Phaser.Scene {
-  private square: Phaser.GameObjects.Rectangle & {
-    body: Phaser.Physics.Arcade.Body;
-  };
-
-  constructor() {
-    super(sceneConfig);
-  }
-
-  public create() {
-    this.square = this.add.rectangle(400, 400, 100, 100, 0xffffff) as any;
-    this.physics.add.existing(this.square);
-  }
-
-  public update() {
-    const cursorKeys = this.input.keyboard.createCursorKeys();
-    if (cursorKeys.right.isDown) {
-      this.square.body.setVelocityX(500);
-    } else if (cursorKeys.left.isDown) {
-      this.square.body.setVelocityX(-500);
-    } else {
-      this.square.body.setVelocityX(0);
-    }
-  }
-}
-
 const gameConfig: Phaser.Types.Core.GameConfig = {
-  title: "Sample",
+  title: 'Sample',
   scene: GameScene,
   type: Phaser.AUTO,
 
   scale: {
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
   },
 
   physics: {
-    default: "arcade",
+    default: 'arcade',
     arcade: {
-      debug: true
-    }
+      debug: true,
+    },
   },
 
-  parent: "game",
-  backgroundColor: "#000000"
+  parent: 'game',
+  backgroundColor: '#000000',
 };
 
 export const game = new Phaser.Game(gameConfig);
