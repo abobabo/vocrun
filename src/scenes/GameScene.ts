@@ -31,14 +31,6 @@ class GameScene extends Phaser.Scene {
 
   public update() {
     const cursorKeys = this.input.keyboard.createCursorKeys();
-    const what = this.square as any;
-    const style = {
-      font: '32px Arial',
-      fill: '#ff0044',
-      wordWrap: true,
-      align: 'center',
-      backgroundColor: '#ffff00',
-    };
     if (cursorKeys.right.isDown) {
       this.square.body.setVelocityX(500);
     } else if (cursorKeys.left.isDown) {
