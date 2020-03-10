@@ -28,11 +28,9 @@ const heroStyle = {
 };
 
 class GameScene extends Phaser.Scene {
-  private square: Phaser.GameObjects.Rectangle & {
+  private hero: Phaser.GameObjects.Rectangle & {
     body: Phaser.Physics.Arcade.Body;
   };
-
-  private platformGroup: Phaser.GameObjects.Group;
 
   private vocabCount: number;
 
@@ -45,9 +43,16 @@ class GameScene extends Phaser.Scene {
     this.vocabCount = 0;
   }
 
+  addBarrier = () => {};
+
   addPlatform = (displayWidth: number = 40) => {
+    // add platfrom sprite
     let platform;
     platform = this.physics.add.sprite(0, 0, 'platform');
+    platform.setImmovable(true);
+    platform.displayHeight = displayWidth;
+    platform.displayWidth = displayWidth;
+    // add platform text
     const text = this.add.text(
       0,
       0,
@@ -55,22 +60,19 @@ class GameScene extends Phaser.Scene {
       vocabStyle,
     );
     text.setOrigin(0.5);
-    platform.setImmovable(true);
-    this.platformGroup.add(platform);
-    platform.displayHeight = displayWidth;
-    platform.displayWidth = displayWidth;
+    // put together in container
     const vocabContainer = this.add.container(window.innerWidth / 2, 10, [
       platform,
       text,
     ]);
     vocabContainer.setSize(128, 64);
+    // move container towards hero
     this.physics.world.enable(vocabContainer);
     const body = vocabContainer.body as Phaser.Physics.Arcade.Body;
     body.setVelocityY(sceneOptions.platformStartSpeed);
+    // explode container when coliding with hero
     body.checkCollision.up = true;
     body.checkCollision.down = true;
-    this.vocabCount += 1;
-
     const explodeOnCollide = () => {
       this.emitter = this.particles.createEmitter({
         frame: 0,
@@ -81,12 +83,12 @@ class GameScene extends Phaser.Scene {
         lifespan: 600,
         gravityY: 10,
       });
-      this.emitter.explode(50, this.square.x, this.square.y);
+      this.emitter.explode(50, this.hero.x, this.hero.y);
       vocabContainer.destroy();
+      this.vocabCount += 1;
     };
-
     this.physics.add.collider(
-      this.square,
+      this.hero,
       platform,
       explodeOnCollide,
       null,
@@ -104,19 +106,14 @@ class GameScene extends Phaser.Scene {
 
   public create() {
     this.particles = this.add.particles('particles');
-    this.square = this.add.text(
+    this.hero = this.add.text(
       window.innerWidth / 2,
       window.innerHeight - 50,
       'vocab',
       heroStyle,
     ) as any;
-    this.square.setOrigin(0.5);
-    this.physics.add.existing(this.square);
-    this.platformGroup = this.add.group({
-      removeCallback: function(platform: any) {
-        platform.scene.platformGroup.add(platform);
-      },
-    });
+    this.hero.setOrigin(0.5);
+    this.physics.add.existing(this.hero);
     const platformTimer = this.time.addEvent({
       delay: sceneOptions.platformTimerDelay,
       callback: this.addPlatform,
@@ -127,11 +124,11 @@ class GameScene extends Phaser.Scene {
   public update() {
     const cursorKeys = this.input.keyboard.createCursorKeys();
     if (cursorKeys.right.isDown) {
-      this.square.body.setVelocityX(500);
+      this.hero.body.setVelocityX(500);
     } else if (cursorKeys.left.isDown) {
-      this.square.body.setVelocityX(-500);
+      this.hero.body.setVelocityX(-500);
     } else {
-      this.square.body.setVelocityX(0);
+      this.hero.body.setVelocityX(0);
     }
   }
 }
