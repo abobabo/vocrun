@@ -13,11 +13,18 @@ let sceneOptions = {
 };
 
 const vocabStyle = {
-  font: '32px Arial',
+  font: '16px Arial',
   fill: '#ff0044',
   wordWrap: true,
   align: 'center',
-  backgroundColor: '#ffff00',
+};
+
+const heroStyle = {
+  font: '14px Arial',
+  fill: 'black',
+  wordWrap: true,
+  align: 'center',
+  backgroundColor: 'white',
 };
 
 class GameScene extends Phaser.Scene {
@@ -100,8 +107,8 @@ class GameScene extends Phaser.Scene {
     this.square = this.add.text(
       window.innerWidth / 2,
       window.innerHeight - 50,
-      'VocabGoesHere',
-      vocabStyle,
+      'vocab',
+      heroStyle,
     ) as any;
     this.square.setOrigin(0.5);
     this.physics.add.existing(this.square);
