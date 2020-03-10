@@ -1,0 +1,117 @@
+[
+  {
+    "id": 600,
+    "hanzi": "爱情",
+    "pinyin": "ài qíng",
+    "translations": ["romance", "love (romantic)", "CL:個|个[gè]"]
+  },
+  {
+    "id": 601,
+    "hanzi": "安排",
+    "pinyin": "ān pái",
+    "translations": ["to arrange", "to plan", "to set up"]
+  },
+  {
+    "id": 602,
+    "hanzi": "安全",
+    "pinyin": "ān quán",
+    "translations": ["safe", "secure", "safety", "security"]
+  },
+  {
+    "id": 603,
+    "hanzi": "暗",
+    "pinyin": "àn",
+    "translations": [
+      "to close (a door)",
+      "to eclipse",
+      "muddled",
+      "stupid",
+      "ignorant",
+      "variant of 暗[àn]"
+    ]
+  },
+  {
+    "id": 604,
+    "hanzi": "按时",
+    "pinyin": "àn shí",
+    "translations": ["on time", "before deadline", "on schedule"]
+  },
+  {
+    "id": 605,
+    "hanzi": "按照",
+    "pinyin": "àn zhào",
+    "translations": [
+      "according to",
+      "in accordance with",
+      "in the light of",
+      "on the basis of"
+    ]
+  },
+  {
+    "id": 606,
+    "hanzi": "包括",
+    "pinyin": "bāo kuò",
+    "translations": [
+      "to comprise",
+      "to include",
+      "to involve",
+      "to incorporate",
+      "to consist of"
+    ]
+  },
+  {
+    "id": 607,
+    "hanzi": "保护",
+    "pinyin": "bǎo hù",
+    "translations": [
+      "to protect",
+      "to defend",
+      "to safeguard",
+      "protection",
+      "CL:種|种[zhǒng]"
+    ],
+    "examples": [
+      {
+        "zh": "法国人希望保护他们的文化",
+        "en": "French People want to protect their culture"
+      }
+    ]
+  },
+  {
+    "id": 608,
+    "hanzi": "保证",
+    "pinyin": "bǎo zhèng",
+    "translations": [
+      "guarantee",
+      "to guarantee",
+      "to ensure",
+      "to safeguard",
+      "to pledge",
+      "CL:個|个[gè]"
+    ]
+  },
+  {
+    "id": 609,
+    "hanzi": "抱",
+    "pinyin": "bào",
+    "translations": [
+      "to hold",
+      "to carry (in one's arms)",
+      "to hug or embrace",
+      "surround",
+      "cherish"
+    ]
+  },
+  {
+    "id": 610,
+    "hanzi": "抱歉",
+    "pinyin": "bào qiàn",
+    "translations": ["to be sorry", "to feel apologetic", "sorry!"]
+  },
+  {
+    "id": 611,
+    "hanzi": "报道",
+    "pinyin": "bào dào",
+    "translations": ["report", "CL:篇", "份[fèn]"]
+  }
+]
