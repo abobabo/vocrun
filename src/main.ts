@@ -1,12 +1,6 @@
 import * as Phaser from 'phaser';
 import GameScene from './scenes/GameScene';
 
-const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
-  active: false,
-  visible: false,
-  key: 'Game',
-};
-
 const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Sample',
   scene: GameScene,
