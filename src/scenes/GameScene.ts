@@ -34,6 +34,10 @@ class GameScene extends Phaser.Scene {
     this.vocabCount = 0;
   }
 
+  collide = () => {
+    console.log('collision!');
+  };
+
   addPlatform = (displayWidth: number = 40) => {
     let platform;
     platform = this.physics.add.sprite(0, 0, 'platform');
@@ -56,7 +60,10 @@ class GameScene extends Phaser.Scene {
     this.physics.world.enable(container);
     const body = container.body as Phaser.Physics.Arcade.Body;
     body.setVelocityY(sceneOptions.platformStartSpeed);
+    body.checkCollision.up = true;
+    body.checkCollision.down = true;
     this.vocabCount += 1;
+    this.physics.add.collider(this.square, platform, this.collide, null, this);
   };
 
   public preload() {
