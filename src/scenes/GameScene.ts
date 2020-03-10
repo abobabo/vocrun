@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import hsk4vocab from '../../assets/vocab/hsk4.json';
+import VocabContainer from '../classes/VocabContainer';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
   active: false,
@@ -12,19 +13,18 @@ let sceneOptions = {
   platformTimerDelay: 2000,
 };
 
-const vocabStyle = {
-  font: '16px Arial',
-  fill: '#ff0044',
-  wordWrap: true,
-  align: 'center',
-};
-
 const heroStyle = {
   font: '14px Arial',
   fill: 'black',
   wordWrap: true,
   align: 'center',
   backgroundColor: 'white',
+};
+
+const vocabStyle = {
+  font: '16px Arial',
+  fill: '#ff0044',
+  align: 'center',
 };
 
 class GameScene extends Phaser.Scene {
@@ -43,28 +43,15 @@ class GameScene extends Phaser.Scene {
     this.vocabCount = 0;
   }
 
-  addBarrier = () => {};
-
-  addPlatform = (displayWidth: number = 40) => {
-    // add platfrom sprite
-    let platform;
-    platform = this.physics.add.sprite(0, 0, 'platform');
-    platform.setImmovable(true);
-    platform.displayHeight = displayWidth;
-    platform.displayWidth = displayWidth;
-    // add platform text
-    const text = this.add.text(
-      0,
-      0,
+  addBarrier = (displayWidth: number = 40) => {
+    const vocabContainer = new VocabContainer(
+      this,
+      window.innerWidth / 2,
+      10,
+      40,
       hsk4vocab[this.vocabCount].hanzi as string,
-      vocabStyle,
     );
-    text.setOrigin(0.5);
-    // put together in container
-    const vocabContainer = this.add.container(window.innerWidth / 2, 10, [
-      platform,
-      text,
-    ]);
+
     vocabContainer.setSize(128, 64);
     // move container towards hero
     this.physics.world.enable(vocabContainer);
@@ -89,7 +76,7 @@ class GameScene extends Phaser.Scene {
     };
     this.physics.add.collider(
       this.hero,
-      platform,
+      vocabContainer,
       explodeOnCollide,
       null,
       this,
@@ -116,7 +103,7 @@ class GameScene extends Phaser.Scene {
     this.physics.add.existing(this.hero);
     const platformTimer = this.time.addEvent({
       delay: sceneOptions.platformTimerDelay,
-      callback: this.addPlatform,
+      callback: this.addBarrier,
       loop: true,
     });
   }
