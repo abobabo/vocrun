@@ -12,7 +12,7 @@ let sceneOptions = {
   platformTimerDelay: 2000,
 };
 
-const style = {
+const vocabStyle = {
   font: '32px Arial',
   fill: '#ff0044',
   wordWrap: true,
@@ -29,13 +29,26 @@ class GameScene extends Phaser.Scene {
 
   private vocabCount: number;
 
+  private particles: Phaser.GameObjects.Particles.ParticleEmitterManager;
+
+  private emitter: Phaser.GameObjects.Particles.ParticleEmitter;
+
   constructor() {
     super(sceneConfig);
     this.vocabCount = 0;
   }
 
-  collide = () => {
-    console.log('collision!');
+  explodeOnCollide = () => {
+    this.emitter = this.particles.createEmitter({
+      frame: 0,
+      x: 400,
+      y: 300,
+      speed: 200,
+      frequency: 100,
+      lifespan: 600,
+      gravityY: 10,
+    });
+    this.emitter.explode(5, this.square.x, this.square.y);
   };
 
   addPlatform = (displayWidth: number = 40) => {
@@ -45,7 +58,7 @@ class GameScene extends Phaser.Scene {
       0,
       0,
       hsk4vocab[this.vocabCount].hanzi as string,
-      style,
+      vocabStyle,
     );
     text.setOrigin(0.5);
     platform.setImmovable(true);
@@ -63,19 +76,30 @@ class GameScene extends Phaser.Scene {
     body.checkCollision.up = true;
     body.checkCollision.down = true;
     this.vocabCount += 1;
-    this.physics.add.collider(this.square, platform, this.collide, null, this);
+    this.physics.add.collider(
+      this.square,
+      platform,
+      this.explodeOnCollide,
+      null,
+      this,
+    );
   };
 
   public preload() {
+    this.load.spritesheet('particles', 'assets/img/platform.png', {
+      frameWidth: 10,
+      frameHeight: 10,
+    });
     this.load.image('platform', 'assets/img/platform.png');
   }
 
   public create() {
+    this.particles = this.add.particles('particles');
     this.square = this.add.text(
       window.innerWidth / 2,
       window.innerHeight - 50,
       'VocabGoesHere',
-      style,
+      vocabStyle,
     ) as any;
     this.square.setOrigin(0.5);
     this.physics.add.existing(this.square);
