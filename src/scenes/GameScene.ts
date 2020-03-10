@@ -21,12 +21,6 @@ const heroStyle = {
   backgroundColor: 'white',
 };
 
-const vocabStyle = {
-  font: '16px Arial',
-  fill: '#ff0044',
-  align: 'center',
-};
-
 class GameScene extends Phaser.Scene {
   private hero: Phaser.GameObjects.Rectangle & {
     body: Phaser.Physics.Arcade.Body;
@@ -56,6 +50,7 @@ class GameScene extends Phaser.Scene {
     // move container towards hero
     this.physics.world.enable(vocabContainer);
     const body = vocabContainer.body as Phaser.Physics.Arcade.Body;
+    body.setImmovable(true);
     body.setVelocityY(sceneOptions.platformStartSpeed);
     // explode container when coliding with hero
     body.checkCollision.up = true;
@@ -101,6 +96,7 @@ class GameScene extends Phaser.Scene {
     ) as any;
     this.hero.setOrigin(0.5);
     this.physics.add.existing(this.hero);
+    this.hero.body.setImmovable(true);
     const platformTimer = this.time.addEvent({
       delay: sceneOptions.platformTimerDelay,
       callback: this.addBarrier,
