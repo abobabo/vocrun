@@ -38,19 +38,6 @@ class GameScene extends Phaser.Scene {
     this.vocabCount = 0;
   }
 
-  explodeOnCollide = () => {
-    this.emitter = this.particles.createEmitter({
-      frame: 0,
-      x: 400,
-      y: 300,
-      speed: 200,
-      frequency: 100,
-      lifespan: 600,
-      gravityY: 10,
-    });
-    this.emitter.explode(5, this.square.x, this.square.y);
-  };
-
   addPlatform = (displayWidth: number = 40) => {
     let platform;
     platform = this.physics.add.sprite(0, 0, 'platform');
@@ -65,21 +52,36 @@ class GameScene extends Phaser.Scene {
     this.platformGroup.add(platform);
     platform.displayHeight = displayWidth;
     platform.displayWidth = displayWidth;
-    const container = this.add.container(window.innerWidth / 2, 10, [
+    const vocabContainer = this.add.container(window.innerWidth / 2, 10, [
       platform,
       text,
     ]);
-    container.setSize(128, 64);
-    this.physics.world.enable(container);
-    const body = container.body as Phaser.Physics.Arcade.Body;
+    vocabContainer.setSize(128, 64);
+    this.physics.world.enable(vocabContainer);
+    const body = vocabContainer.body as Phaser.Physics.Arcade.Body;
     body.setVelocityY(sceneOptions.platformStartSpeed);
     body.checkCollision.up = true;
     body.checkCollision.down = true;
     this.vocabCount += 1;
+
+    const explodeOnCollide = () => {
+      this.emitter = this.particles.createEmitter({
+        frame: 0,
+        x: 400,
+        y: 300,
+        speed: 200,
+        frequency: 100,
+        lifespan: 600,
+        gravityY: 10,
+      });
+      this.emitter.explode(50, this.square.x, this.square.y);
+      vocabContainer.destroy();
+    };
+
     this.physics.add.collider(
       this.square,
       platform,
-      this.explodeOnCollide,
+      explodeOnCollide,
       null,
       this,
     );
