@@ -7,26 +7,27 @@ const vocabStyle = {
 };
 
 class VocabContainer extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, displayWidth, vocabText) {
-    const platform = new Phaser.Physics.Arcade.Sprite(
+  constructor(scene, x, y, width, vocab) {
+    const vocabSprite = new Phaser.Physics.Arcade.Sprite(
       scene,
       0,
       null,
       'platform',
     );
-    platform.displayHeight = displayWidth;
-    platform.displayWidth = displayWidth;
+    vocabSprite.displayHeight = width;
+    vocabSprite.displayWidth = width;
 
-    const text = new Phaser.GameObjects.Text(
+    const vocabText = new Phaser.GameObjects.Text(
       scene,
       0,
       0,
-      vocabText,
+      vocab,
       vocabStyle,
     );
-    text.setOrigin(0.5);
+    vocabText.setOrigin(0.5);
 
-    super(scene, x, y, [platform, text]);
+    super(scene, x, y, [vocabSprite, vocabText]);
+    this.setSize(width, width);
     scene.add.existing(this);
   }
 
