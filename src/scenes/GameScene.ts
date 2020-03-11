@@ -87,7 +87,7 @@ class GameScene extends Phaser.Scene {
       frameWidth: 10,
       frameHeight: 10,
     });
-    this.load.image('platform', 'assets/img/platform.png');
+    this.load.image('vocabSprite', 'assets/img/platform.png');
   }
 
   public create() {

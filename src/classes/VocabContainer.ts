@@ -12,7 +12,7 @@ class VocabContainer extends Phaser.GameObjects.Container {
       scene,
       0,
       null,
-      'platform',
+      'vocabSprite',
     );
     vocabSprite.displayHeight = width;
     vocabSprite.displayWidth = width;
