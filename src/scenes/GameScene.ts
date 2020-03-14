@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { VocabRoll } from '../classes';
 import hsk4vocab from '../../assets/vocab/hsk4.json';
 import VocabContainer from '../classes/VocabContainer';
 
@@ -11,7 +12,7 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 let sceneOptions = {
   barrierStartSpeed: 150,
   barrierTimerDelay: 2000,
-  barriereLength: 5,
+  barrierLength: 5,
   vocabContainerWidth: 80,
 };
 
@@ -42,11 +43,10 @@ class GameScene extends Phaser.Scene {
   addBarrier = () => {
     const barrierContainer = this.add.container(window.innerWidth / 2, 10, []);
     barrierContainer.setSize(
-      sceneOptions.vocabContainerWidth * sceneOptions.barriereLength,
+      sceneOptions.vocabContainerWidth * sceneOptions.barrierLength,
       sceneOptions.vocabContainerWidth,
     );
-    // add a row of VocabContainers to BarrierContainer
-    for (let i = 0; i < sceneOptions.barriereLength; i++) {
+    for (let i = 0; i < sceneOptions.barrierLength; i++) {
       const vocabContainer = new VocabContainer(
         this,
         -(barrierContainer.width / 2) +
@@ -57,29 +57,42 @@ class GameScene extends Phaser.Scene {
         hsk4vocab[this.vocabCount].hanzi as string,
       );
       this.physics.world.enable(vocabContainer);
-      const body = vocabContainer.body as Phaser.Physics.Arcade.Body;
-      // explode container when coliding with hero
-      body.checkCollision.up = true;
-      body.checkCollision.down = true;
-      const explodeOnCollide = () => {
-        this.emitter.explode(50, this.hero.x, this.hero.y);
-        vocabContainer.destroy();
-        this.vocabCount += 1;
-      };
-      this.physics.add.collider(
-        this.hero,
-        vocabContainer,
-        explodeOnCollide,
-        null,
-        this,
-      );
+      this.addHeroCollision(vocabContainer, this.correctVocabCollision);
       barrierContainer.add(vocabContainer);
     }
-    // move barrier towards hero
-    this.physics.world.enable(barrierContainer);
-    const body = barrierContainer.body as Phaser.Physics.Arcade.Body;
+    this.moveTowardsHero(barrierContainer, sceneOptions.barrierStartSpeed);
+  };
+
+  addHeroCollision = (
+    gameObject: Phaser.GameObjects.GameObject,
+    explodeOnCollide: any,
+  ) => {
+    this.physics.add.collider(
+      this.hero,
+      gameObject,
+      explodeOnCollide,
+      null,
+      this,
+    );
+  };
+
+  correctVocabCollision = (
+    hero: Phaser.GameObjects.GameObject,
+    vocabContainer: Phaser.GameObjects.GameObject,
+  ) => {
+    this.emitter.explode(50, this.hero.x, this.hero.y);
+    vocabContainer.destroy();
+    this.vocabCount += 1;
+  };
+
+  moveTowardsHero = (
+    gameObject: Phaser.GameObjects.GameObject,
+    speed: number,
+  ) => {
+    this.physics.world.enable(gameObject);
+    const body = gameObject.body as Phaser.Physics.Arcade.Body;
     body.setImmovable(true);
-    body.setVelocityY(sceneOptions.barrierStartSpeed);
+    body.setVelocityY(speed);
   };
 
   public preload() {
