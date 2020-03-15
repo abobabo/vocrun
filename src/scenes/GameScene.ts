@@ -65,7 +65,6 @@ class GameScene extends Phaser.Scene {
     const correctVocabIndex = Math.floor(Math.random() * vocabRoll.length);
     vocabRollWithCorrectVocab[correctVocabIndex].correct = true;
     this.vocabQueue.push(correctVocabIndex);
-    console.log('pushed to queue' + JSON.stringify(this.vocabQueue));
     return vocabRollWithCorrectVocab;
   };
 
