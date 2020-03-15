@@ -10,8 +10,8 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 };
 
 let sceneOptions = {
-  barrierStartSpeed: 100,
-  barrierTimerDelay: 3000,
+  barrierStartSpeed: 50,
+  barrierTimerDelay: 6000,
   barrierLength: 5,
   vocabContainerWidth: 80,
 };
@@ -30,9 +30,13 @@ class GameScene extends Phaser.Scene {
     text: Phaser.GameObjects.Text;
   };
 
-  private particles: Phaser.GameObjects.Particles.ParticleEmitterManager;
+  private blooddrops: Phaser.GameObjects.Particles.ParticleEmitterManager;
 
-  private emitter: Phaser.GameObjects.Particles.ParticleEmitter;
+  private goldrings: Phaser.GameObjects.Particles.ParticleEmitterManager;
+
+  private wrongVocabEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
+
+  private correctVocabEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
   private vocabQueue: number[] = [];
 
@@ -85,7 +89,12 @@ class GameScene extends Phaser.Scene {
         hsk4vocab[vocabRoll[i].vocabId].hanzi as string,
       );
       this.physics.world.enable(vocabContainer);
-      this.addHeroCollision(vocabContainer, this.correctVocabCollision);
+      if (vocabRoll[i].correct) {
+        this.addHeroCollision(vocabContainer, this.correctVocabCollision);
+      } else {
+        this.addHeroCollision(vocabContainer, this.wrongVocabCollision);
+      }
+
       barrierContainer.add(vocabContainer);
     }
     this.moveTowardsHero(barrierContainer, sceneOptions.barrierStartSpeed);
@@ -108,7 +117,17 @@ class GameScene extends Phaser.Scene {
     hero: Phaser.GameObjects.GameObject,
     vocabContainer: Phaser.GameObjects.GameObject,
   ) => {
-    this.emitter.explode(50, this.hero.x, this.hero.y);
+    this.correctVocabEmitter.explode(50, this.hero.x, this.hero.y);
+    vocabContainer.destroy();
+    const currentInQueue = this.vocabQueue.shift();
+    this.hero.setText(hsk4vocab[currentInQueue].translations[0]);
+  };
+
+  wrongVocabCollision = (
+    hero: Phaser.GameObjects.GameObject,
+    vocabContainer: Phaser.GameObjects.GameObject,
+  ) => {
+    this.wrongVocabEmitter.explode(30, this.hero.x, this.hero.y);
     vocabContainer.destroy();
     const currentInQueue = this.vocabQueue.shift();
     this.hero.setText(hsk4vocab[currentInQueue].translations[0]);
@@ -125,16 +144,31 @@ class GameScene extends Phaser.Scene {
   };
 
   public preload() {
-    this.load.spritesheet('particles', 'assets/img/platform.png', {
+    this.load.spritesheet('blooddrop', 'assets/img/blooddrop.png', {
+      frameWidth: 64,
+      frameHeight: 64,
+    });
+    this.load.spritesheet('goldrings', 'assets/img/platform.png', {
       frameWidth: 10,
       frameHeight: 10,
     });
+
     this.load.image('vocabSprite', 'assets/img/platform.png');
   }
 
   public create() {
-    this.particles = this.add.particles('particles');
-    this.emitter = this.particles.createEmitter({
+    this.goldrings = this.add.particles('goldrings');
+    this.correctVocabEmitter = this.goldrings.createEmitter({
+      frame: 0,
+      x: 400,
+      y: 300,
+      speed: 200,
+      frequency: 100,
+      lifespan: 600,
+      gravityY: 10,
+    });
+    this.blooddrops = this.add.particles('blooddrop');
+    this.wrongVocabEmitter = this.blooddrops.createEmitter({
       frame: 0,
       x: 400,
       y: 300,
