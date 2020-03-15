@@ -10,10 +10,10 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 };
 
 let sceneOptions = {
-  barrierStartSpeed: 50,
-  barrierTimerDelay: 6000,
+  barrierStartSpeed: 40,
+  barrierTimerDelay: 7000,
   barrierLength: 5,
-  vocabContainerWidth: 80,
+  vocabContainerWidth: 120,
 };
 
 const heroStyle = {
@@ -38,7 +38,7 @@ class GameScene extends Phaser.Scene {
 
   private correctVocabEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
-  private vocabQueue: number[] = [];
+  private vocabStack: number[] = [];
 
   constructor() {
     super(sceneConfig);
@@ -46,7 +46,7 @@ class GameScene extends Phaser.Scene {
 
   prepareBarrier = () => {
     const rolledVocabIds = this.rollVocabIds(sceneOptions.barrierLength);
-    const vocabRoll = this.setCorrectdVocab(rolledVocabIds);
+    const vocabRoll = this.setCorrectVocab(rolledVocabIds);
     this.addBarrier(vocabRoll);
   };
 
@@ -56,19 +56,23 @@ class GameScene extends Phaser.Scene {
       const roll = Math.floor(Math.random() * hsk4vocab.length);
       if (vocabIdRoll.indexOf(roll) === -1) vocabIdRoll.push(roll);
     }
-    const henlo = vocabIdRoll.map(x => {
+    const vocabRoll = vocabIdRoll.map(x => {
       return {
         vocabId: x,
       };
     });
-    return henlo;
+    return vocabRoll;
   };
 
-  setCorrectdVocab = (vocabRoll: VocabRoll[]): VocabRoll[] => {
+  setCorrectVocab = (vocabRoll: VocabRoll[]): VocabRoll[] => {
     const vocabRollWithCorrectVocab = Object.assign({}, vocabRoll);
     const correctVocabIndex = Math.floor(Math.random() * vocabRoll.length);
     vocabRollWithCorrectVocab[correctVocabIndex].correct = true;
-    this.vocabQueue.push(correctVocabIndex);
+    this.vocabStack.push(vocabRollWithCorrectVocab[correctVocabIndex].vocabId);
+    if (!this.hero.text) {
+      const currentInQueue = this.vocabStack.shift();
+      this.hero.setText(hsk4vocab[currentInQueue].translations[0]);
+    }
     return vocabRollWithCorrectVocab;
   };
 
@@ -119,7 +123,7 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.correctVocabEmitter.explode(50, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    const currentInQueue = this.vocabQueue.shift();
+    const currentInQueue = this.vocabStack.shift();
     this.hero.setText(hsk4vocab[currentInQueue].translations[0]);
   };
 
@@ -129,7 +133,7 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.wrongVocabEmitter.explode(30, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    const currentInQueue = this.vocabQueue.shift();
+    const currentInQueue = this.vocabStack.shift();
     this.hero.setText(hsk4vocab[currentInQueue].translations[0]);
   };
 
@@ -180,7 +184,7 @@ class GameScene extends Phaser.Scene {
     this.hero = this.add.text(
       window.innerWidth / 2,
       window.innerHeight - 50,
-      'vocab',
+      '',
       heroStyle,
     ) as any;
     this.hero.setOrigin(0.5);
