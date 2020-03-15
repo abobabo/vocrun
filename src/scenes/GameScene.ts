@@ -29,18 +29,43 @@ class GameScene extends Phaser.Scene {
     body: Phaser.Physics.Arcade.Body;
   };
 
-  private vocabCount: number;
-
   private particles: Phaser.GameObjects.Particles.ParticleEmitterManager;
 
   private emitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
   constructor() {
     super(sceneConfig);
-    this.vocabCount = 0;
   }
 
-  addBarrier = () => {
+  prepareBarrier = () => {
+    const rolledVocabIds = this.rollVocabIds(sceneOptions.barrierLength);
+    const vocabRoll = this.rollCorrectdVocab(rolledVocabIds);
+    Math.floor(Math.random() * sceneOptions.barrierLength);
+    this.addBarrier(vocabRoll);
+  };
+
+  rollVocabIds = (vocabAmount: number): VocabRoll[] => {
+    const vocabIdRoll: any[] = [];
+    while (vocabIdRoll.length < vocabAmount) {
+      const roll = Math.floor(Math.random() * hsk4vocab.length);
+      if (vocabIdRoll.indexOf(roll) === -1) vocabIdRoll.push(roll);
+    }
+    const henlo = vocabIdRoll.map(x => {
+      return {
+        vocabId: x,
+      };
+    });
+    return henlo;
+  };
+
+  rollCorrectdVocab = (vocabRoll: VocabRoll[]): VocabRoll[] => {
+    const vocabRollWithCorrectVocab = Object.assign({}, vocabRoll);
+    const correctVocabIndex = Math.floor(Math.random() * vocabRoll.length);
+    vocabRollWithCorrectVocab[correctVocabIndex].correct = true;
+    return vocabRollWithCorrectVocab;
+  };
+
+  addBarrier = (vocabRoll: VocabRoll[]) => {
     const barrierContainer = this.add.container(window.innerWidth / 2, 10, []);
     barrierContainer.setSize(
       sceneOptions.vocabContainerWidth * sceneOptions.barrierLength,
@@ -54,7 +79,7 @@ class GameScene extends Phaser.Scene {
           sceneOptions.vocabContainerWidth * i,
         0,
         sceneOptions.vocabContainerWidth,
-        hsk4vocab[this.vocabCount].hanzi as string,
+        hsk4vocab[vocabRoll[i].vocabId].hanzi as string,
       );
       this.physics.world.enable(vocabContainer);
       this.addHeroCollision(vocabContainer, this.correctVocabCollision);
@@ -82,7 +107,6 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.emitter.explode(50, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    this.vocabCount += 1;
   };
 
   moveTowardsHero = (
@@ -125,7 +149,7 @@ class GameScene extends Phaser.Scene {
     this.hero.body.setImmovable(true);
     const barrierTimer = this.time.addEvent({
       delay: sceneOptions.barrierTimerDelay,
-      callback: this.addBarrier,
+      callback: this.prepareBarrier,
       loop: true,
     });
   }
