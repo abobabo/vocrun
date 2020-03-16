@@ -113,5 +113,249 @@
     "hanzi": "报道",
     "pinyin": "bào dào",
     "translations": ["report", "CL:篇", "份[fèn]"]
+  },
+  {
+    "id": 625,
+    "hanzi": "博士",
+    "pinyin": "bó shì",
+    "translations": ["doctor", "court academician (in feudal China)", "Ph.D."]
+  },
+  {
+    "id": 671,
+    "hanzi": "大夫",
+    "pinyin": "dài fu",
+    "translations": [
+      "doctor",
+      "minister of state (in pre-Han states)",
+      "CL:個|个",
+      "位[wèi]"
+    ]
+  },
+  {
+    "id": 672,
+    "hanzi": "当",
+    "pinyin": "dāng",
+    "translations": [
+      "to be",
+      "to act as",
+      "manage",
+      "withstand",
+      "when",
+      "during",
+      "ought",
+      "should",
+      "match equally",
+      "equal",
+      "same",
+      "obstruct",
+      "just at (a time or place)",
+      "on the spot",
+      "right",
+      "just at"
+    ]
+  },
+  {
+    "id": 675,
+    "hanzi": "刀",
+    "pinyin": "dāo",
+    "translations": [
+      "knife",
+      "blade",
+      "single-edged sword",
+      "cutlass",
+      "CL:把[bǎ]",
+      "classifier for sets of one hundred sheets (of paper)"
+    ]
+  },
+  {
+    "id": 733,
+    "hanzi": "感谢",
+    "pinyin": "gǎn xiè",
+    "translations": [
+      "(express) thanks",
+      "gratitude",
+      "grateful",
+      "thankful",
+      "thanks"
+    ]
+  },
+  {
+    "id": 782,
+    "hanzi": "护士",
+    "pinyin": "hù shi",
+    "translations": ["nurse", "CL:個|个[gè]"]
+  },
+  {
+    "id": 819,
+    "hanzi": "教授",
+    "pinyin": "jiào shòu",
+    "translations": [
+      "professor",
+      "to instruct",
+      "to lecture on",
+      "CL:個|个",
+      "位[wèi]"
+    ]
+  },
+  {
+    "id": 825,
+    "hanzi": "紧张",
+    "pinyin": "jǐn zhāng",
+    "translations": [
+      "nervous",
+      "keyed up",
+      "intense",
+      "tense",
+      "strained",
+      "in short supply",
+      "scarce",
+      "CL:陣|阵[zhèn]"
+    ]
+  },
+  {
+    "id": 873,
+    "hanzi": "理想",
+    "pinyin": "lǐ xiǎng",
+    "translations": [
+      "a dream",
+      "an ideal",
+      "perfection",
+      "ideal",
+      "perfect",
+      "desirable",
+      "CL:個|个[gè]"
+    ]
+  },
+  {
+    "id": 929,
+    "hanzi": "起来",
+    "pinyin": "qi lai",
+    "translations": ["(after a verb", "indicates beginning or completeness)"]
+  },
+  {
+    "id": 989,
+    "hanzi": "适合",
+    "pinyin": "shì hé",
+    "translations": ["to fit", "to suit"]
+  },
+  {
+    "id": 1086,
+    "hanzi": "血",
+    "pinyin": "xuè",
+    "translations": [
+      "blood",
+      "informal colloquial and Taiwan pr. [xiě]",
+      "also pr. [xuě]",
+      "CL:滴",
+      "片[piàn]"
+    ]
+  },
+  {
+    "id": 1131,
+    "hanzi": "语言",
+    "pinyin": "yǔ yán",
+    "translations": ["language", "CL:門|门", "種|种[zhǒng]"]
+  },
+  {
+    "id": 609,
+    "hanzi": "抱",
+    "pinyin": "bào",
+    "translations": [
+      "to hold",
+      "to carry (in one's arms)",
+      "to hug or embrace",
+      "surround",
+      "cherish"
+    ]
+  },
+  {
+    "id": 678,
+    "hanzi": "到底",
+    "pinyin": "dào dǐ",
+    "translations": [
+      "finally",
+      "in the end",
+      "when all is said and done",
+      "after all",
+      "to the end",
+      "to the last"
+    ]
+  },
+  {
+    "id": 743,
+    "hanzi": "够",
+    "pinyin": "gòu",
+    "translations": ["to reach", "to be enough"]
+  },
+  {
+    "id": 779,
+    "hanzi": "后来",
+    "pinyin": "hòu lái",
+    "translations": ["afterwards", "later"]
+  },
+  {
+    "id": 777,
+    "hanzi": "厚",
+    "pinyin": "hòu",
+    "translations": [
+      "thick",
+      "deep or profound",
+      "kind",
+      "generous",
+      "rich or strong in flavor",
+      "to favor",
+      "to stress"
+    ]
+  },
+  {
+    "id": 972,
+    "hanzi": "生活",
+    "pinyin": "shēng huó",
+    "translations": ["life", "activity", "to live", "livelihood"]
+  },
+  {
+    "id": 1008,
+    "hanzi": "硕士",
+    "pinyin": "shuò shì",
+    "translations": ["master's degree", "learned person"]
+  },
+  {
+    "id": 1094,
+    "hanzi": "研究生",
+    "pinyin": "yán jiū shēng",
+    "translations": [
+      "graduate student",
+      "postgraduate student",
+      "research student"
+    ]
+  },
+  {
+    "id": 1128,
+    "hanzi": "于是",
+    "pinyin": "yú shì",
+    "translations": [
+      "thereupon",
+      "as a result",
+      "consequently",
+      "thus",
+      "hence"
+    ]
+  },
+  {
+    "id": 1160,
+    "hanzi": "知识",
+    "pinyin": "zhī shi",
+    "translations": [
+      "intellectual",
+      "knowledge-related",
+      "knowledge",
+      "CL:門|门[mén]"
+    ]
+  },
+  {
+    "id": 1183,
+    "hanzi": "赚",
+    "pinyin": "zhuàn",
+    "translations": ["to earn", "to make a profit"]
   }
 ]
