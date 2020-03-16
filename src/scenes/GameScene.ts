@@ -90,7 +90,9 @@ class GameScene extends Phaser.Scene {
           sceneOptions.vocabContainerWidth * i,
         0,
         sceneOptions.vocabContainerWidth,
-        hsk4vocab[vocabRoll[i].vocabId].hanzi as string,
+        `${hsk4vocab[vocabRoll[i].vocabId].hanzi} \n ${
+          hsk4vocab[vocabRoll[i].vocabId].pinyin
+        }`,
       );
       this.physics.world.enable(vocabContainer);
       if (vocabRoll[i].correct) {
