@@ -123,8 +123,12 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.correctVocabEmitter.explode(50, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    const currentInQueue = this.vocabStack.shift();
-    this.hero.setText(hsk4vocab[currentInQueue].translations[0]);
+    const firsttInQueue = this.vocabStack.shift();
+    this.physics.world.colliders
+      .getActive()
+      .reverse()
+      .splice(sceneOptions.barrierLength);
+    this.hero.setText(hsk4vocab[firsttInQueue].translations[0]);
   };
 
   wrongVocabCollision = (
@@ -133,8 +137,12 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.wrongVocabEmitter.explode(30, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    const currentInQueue = this.vocabStack.shift();
-    this.hero.setText(hsk4vocab[currentInQueue].translations[0]);
+    const firsttInQueue = this.vocabStack.shift();
+    this.physics.world.colliders
+      .getActive()
+      .reverse()
+      .splice(sceneOptions.barrierLength);
+    this.hero.setText(hsk4vocab[firsttInQueue].translations[0]);
   };
 
   moveTowardsHero = (
@@ -152,16 +160,15 @@ class GameScene extends Phaser.Scene {
       frameWidth: 64,
       frameHeight: 64,
     });
-    this.load.spritesheet('goldrings', 'assets/img/platform.png', {
-      frameWidth: 10,
-      frameHeight: 10,
+    this.load.spritesheet('goldring', 'assets/img/goldring.png', {
+      frameWidth: 64,
+      frameHeight: 64,
     });
-
     this.load.image('vocabSprite', 'assets/img/platform.png');
   }
 
   public create() {
-    this.goldrings = this.add.particles('goldrings');
+    this.goldrings = this.add.particles('goldring');
     this.correctVocabEmitter = this.goldrings.createEmitter({
       frame: 0,
       x: 400,
