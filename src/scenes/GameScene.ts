@@ -9,7 +9,7 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
   key: 'Game',
 };
 
-let sceneOptions = {
+let gameOptions = {
   barrierStartSpeed: 100,
   barrierTimerDelay: 3000,
   barrierLength: 5,
@@ -45,7 +45,7 @@ class GameScene extends Phaser.Scene {
   }
 
   prepareBarrier = () => {
-    const rolledVocabIds = this.rollVocabIds(sceneOptions.barrierLength);
+    const rolledVocabIds = this.rollVocabIds(gameOptions.barrierLength);
     const vocabRoll = this.setCorrectVocab(rolledVocabIds);
     this.addBarrier(vocabRoll);
   };
@@ -79,17 +79,17 @@ class GameScene extends Phaser.Scene {
   addBarrier = (vocabRoll: VocabRoll[]) => {
     const barrierContainer = this.add.container(window.innerWidth / 2, 10, []);
     barrierContainer.setSize(
-      sceneOptions.vocabContainerWidth * sceneOptions.barrierLength,
-      sceneOptions.vocabContainerWidth,
+      gameOptions.vocabContainerWidth * gameOptions.barrierLength,
+      gameOptions.vocabContainerWidth,
     );
-    for (let i = 0; i < sceneOptions.barrierLength; i++) {
+    for (let i = 0; i < gameOptions.barrierLength; i++) {
       const vocabContainer = new VocabContainer(
         this,
         -(barrierContainer.width / 2) +
-          sceneOptions.vocabContainerWidth / 2 +
-          sceneOptions.vocabContainerWidth * i,
+          gameOptions.vocabContainerWidth / 2 +
+          gameOptions.vocabContainerWidth * i,
         0,
-        sceneOptions.vocabContainerWidth,
+        gameOptions.vocabContainerWidth,
         `${hsk4vocab[vocabRoll[i].vocabId].hanzi} \n ${
           hsk4vocab[vocabRoll[i].vocabId].pinyin
         }`,
@@ -103,7 +103,7 @@ class GameScene extends Phaser.Scene {
 
       barrierContainer.add(vocabContainer);
     }
-    this.moveTowardsHero(barrierContainer, sceneOptions.barrierStartSpeed);
+    this.moveTowardsHero(barrierContainer, gameOptions.barrierStartSpeed);
     this.children.bringToTop(this.hero);
   };
 
@@ -130,7 +130,7 @@ class GameScene extends Phaser.Scene {
     this.physics.world.colliders
       .getActive()
       .reverse()
-      .splice(sceneOptions.barrierLength);
+      .splice(gameOptions.barrierLength);
     this.hero.setText(hsk4vocab[firsttInQueue].translations[0]);
   };
 
@@ -144,7 +144,7 @@ class GameScene extends Phaser.Scene {
     this.physics.world.colliders
       .getActive()
       .reverse()
-      .splice(sceneOptions.barrierLength);
+      .splice(gameOptions.barrierLength);
     this.hero.setText(hsk4vocab[firsttInQueue].translations[0]);
   };
 
@@ -201,7 +201,7 @@ class GameScene extends Phaser.Scene {
     this.physics.add.existing(this.hero);
     this.hero.body.setImmovable(true);
     const barrierTimer = this.time.addEvent({
-      delay: sceneOptions.barrierTimerDelay,
+      delay: gameOptions.barrierTimerDelay,
       callback: this.prepareBarrier,
       loop: true,
     });
