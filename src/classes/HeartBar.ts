@@ -29,6 +29,11 @@ class HeartBar {
     }
     scene.add.existing(this);
   }
+
+  loseHeart = () => {
+    const [lastHeart] = this.hearts.getChildren().slice(-1);
+    this.hearts.remove(lastHeart, true, true);
+  };
 }
 
 export default HeartBar;

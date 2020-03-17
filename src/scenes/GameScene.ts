@@ -151,6 +151,7 @@ class GameScene extends Phaser.Scene {
       .reverse()
       .splice(gameOptions.barrierLength);
     this.hero.setText(hsk4vocab[firsttInQueue].translations[0]);
+    this.heartBar.loseHeart();
   };
 
   moveTowardsHero = (
@@ -218,6 +219,7 @@ class GameScene extends Phaser.Scene {
     const cursorKeys = this.input.keyboard.createCursorKeys();
     if (cursorKeys.right.isDown) {
       this.hero.body.setVelocityX(500);
+      this.heartBar.loseHeart();
     } else if (cursorKeys.left.isDown) {
       this.hero.body.setVelocityX(-500);
     } else {
