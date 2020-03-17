@@ -10,8 +10,8 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
 };
 
 let sceneOptions = {
-  barrierStartSpeed: 40,
-  barrierTimerDelay: 7000,
+  barrierStartSpeed: 100,
+  barrierTimerDelay: 3000,
   barrierLength: 5,
   vocabContainerWidth: 120,
 };
@@ -104,6 +104,7 @@ class GameScene extends Phaser.Scene {
       barrierContainer.add(vocabContainer);
     }
     this.moveTowardsHero(barrierContainer, sceneOptions.barrierStartSpeed);
+    this.children.bringToTop(this.hero);
   };
 
   addHeroCollision = (
