@@ -9,11 +9,12 @@ const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
   key: 'Game',
 };
 
-let gameOptions = {
+export const gameOptions = {
   barrierStartSpeed: 100,
   barrierTimerDelay: 3000,
   barrierLength: 5,
   vocabContainerWidth: 120,
+  heartCount: 3,
 };
 
 const heroStyle = {
@@ -38,7 +39,7 @@ class GameScene extends Phaser.Scene {
 
   private correctVocabEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
-  private vocabStack: number[] = [];
+  private vocabQueue: number[] = [];
 
   constructor() {
     super(sceneConfig);
@@ -68,9 +69,9 @@ class GameScene extends Phaser.Scene {
     const vocabRollWithCorrectVocab = Object.assign({}, vocabRoll);
     const correctVocabIndex = Math.floor(Math.random() * vocabRoll.length);
     vocabRollWithCorrectVocab[correctVocabIndex].correct = true;
-    this.vocabStack.push(vocabRollWithCorrectVocab[correctVocabIndex].vocabId);
+    this.vocabQueue.push(vocabRollWithCorrectVocab[correctVocabIndex].vocabId);
     if (!this.hero.text) {
-      const currentInQueue = this.vocabStack.shift();
+      const currentInQueue = this.vocabQueue.shift();
       this.hero.setText(hsk4vocab[currentInQueue].translations[0]);
     }
     return vocabRollWithCorrectVocab;
@@ -126,7 +127,7 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.correctVocabEmitter.explode(50, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    const firsttInQueue = this.vocabStack.shift();
+    const firsttInQueue = this.vocabQueue.shift();
     this.physics.world.colliders
       .getActive()
       .reverse()
@@ -140,7 +141,7 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.wrongVocabEmitter.explode(30, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    const firsttInQueue = this.vocabStack.shift();
+    const firsttInQueue = this.vocabQueue.shift();
     this.physics.world.colliders
       .getActive()
       .reverse()
@@ -168,6 +169,7 @@ class GameScene extends Phaser.Scene {
       frameHeight: 64,
     });
     this.load.image('vocab', 'assets/img/platform.png');
+    this.load.image('heart', 'assets/img/heart.png');
   }
 
   public create() {
