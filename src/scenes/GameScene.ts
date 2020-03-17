@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser';
 import { VocabRoll } from '../classes';
 import VocabContainer from '../classes/VocabContainer';
+import HeartBar from '../classes/HeartBar';
 import hsk4vocab from '../../assets/vocab/hsk4.json';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
@@ -15,6 +16,7 @@ export const gameOptions = {
   barrierLength: 5,
   vocabContainerWidth: 120,
   heartCount: 3,
+  heartWidth: 48,
 };
 
 const heroStyle = {
@@ -40,6 +42,8 @@ class GameScene extends Phaser.Scene {
   private correctVocabEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
   private vocabQueue: number[] = [];
+
+  private heartBar: HeartBar;
 
   constructor() {
     super(sceneConfig);
@@ -173,6 +177,7 @@ class GameScene extends Phaser.Scene {
   }
 
   public create() {
+    this.heartBar = new HeartBar(this, 0, 0, gameOptions.heartWidth);
     this.goldrings = this.add.particles('goldring');
     this.correctVocabEmitter = this.goldrings.createEmitter({
       frame: 0,
