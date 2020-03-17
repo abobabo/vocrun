@@ -7,7 +7,9 @@ const vocabStyle = {
   align: 'center',
 };
 
-class HeartBar extends Phaser.GameObjects.Group {
+class HeartBar {
+  private hearts: Phaser.GameObjects.Group;
+
   constructor(scene, x, y, width) {
     const heartSprite = new Phaser.Physics.Arcade.Sprite(
       scene,
@@ -17,20 +19,16 @@ class HeartBar extends Phaser.GameObjects.Group {
     );
     heartSprite.displayHeight = width;
     heartSprite.displayWidth = width;
-    super(scene, x, y);
-    const hearts = scene.physics.add.group({ immovable: true });
+    this.hearts = scene.physics.add.group({ immovable: true });
 
     for (var i = 0; i < gameOptions.heartCount; i++) {
-      const heart = hearts.create(x + width * i, y, 'heart');
+      const heart = this.hearts.create(x + width * i, y, 'heart');
       scene.physics.add.existing(heart);
       heart.body.setImmovable();
       heart.setOrigin(0.0);
     }
     scene.add.existing(this);
   }
-
-  preload() {}
-  create() {}
 }
 
 export default HeartBar;
