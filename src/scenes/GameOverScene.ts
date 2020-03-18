@@ -16,8 +16,15 @@ export const gameOptions = {
 };
 
 class GameOverScene extends Phaser.Scene {
+  private score;
+
   constructor() {
     super(sceneConfig);
+  }
+
+  init(data) {
+    this.score = data.score;
+    console.log(this.score);
   }
 
   public preload() {}

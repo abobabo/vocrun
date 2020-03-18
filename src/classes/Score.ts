@@ -10,6 +10,11 @@ const scoreStyle = {
 class Score {
   private scoreDisplay: Phaser.GameObjects.Text;
   private score: number = 0;
+
+  getScore = () => {
+    return this.score;
+  };
+
   constructor(scene, x, y) {
     this.scoreDisplay = new Phaser.GameObjects.Text(
       scene,

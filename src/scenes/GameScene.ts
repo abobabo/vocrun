@@ -157,7 +157,7 @@ class GameScene extends Phaser.Scene {
       .splice(gameOptions.barrierLength);
     this.hero.setText(hsk4vocab[firsttInQueue].translations[0]);
     if (!this.heartBar.loseHeart()) {
-      this.scene.start('GameOver');
+      this.scene.start('GameOver', { score: this.score.getScore() });
     }
   };
 
