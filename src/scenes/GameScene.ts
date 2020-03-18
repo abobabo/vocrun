@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import { VocabRoll } from '../classes';
 import VocabContainer from '../classes/VocabContainer';
 import HeartBar from '../classes/HeartBar';
+import Score from '../classes/Score';
 import hsk4vocab from '../../assets/vocab/hsk4.json';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
@@ -17,6 +18,7 @@ export const gameOptions = {
   vocabContainerWidth: 120,
   heartCount: 3,
   heartWidth: 48,
+  correctVocabScore: 5,
 };
 
 const heroStyle = {
@@ -44,6 +46,8 @@ class GameScene extends Phaser.Scene {
   private vocabQueue: number[] = [];
 
   private heartBar: HeartBar;
+
+  private score: Score;
 
   constructor() {
     super(sceneConfig);
@@ -137,6 +141,7 @@ class GameScene extends Phaser.Scene {
       .reverse()
       .splice(gameOptions.barrierLength);
     this.hero.setText(hsk4vocab[firsttInQueue].translations[0]);
+    this.score.increase();
   };
 
   wrongVocabCollision = (
@@ -151,7 +156,9 @@ class GameScene extends Phaser.Scene {
       .reverse()
       .splice(gameOptions.barrierLength);
     this.hero.setText(hsk4vocab[firsttInQueue].translations[0]);
-    this.heartBar.loseHeart();
+    if (!this.heartBar.loseHeart()) {
+      this.scene.start('GameOver');
+    }
   };
 
   moveTowardsHero = (
@@ -179,6 +186,7 @@ class GameScene extends Phaser.Scene {
 
   public create() {
     this.heartBar = new HeartBar(this, 0, 0, gameOptions.heartWidth);
+    this.score = new Score(this, window.innerWidth - 20, 20);
     this.goldrings = this.add.particles('goldring');
     this.correctVocabEmitter = this.goldrings.createEmitter({
       frame: 0,
