@@ -27,6 +27,7 @@ class HeartBar {
   loseHeart = () => {
     const [lastHeart] = this.hearts.getChildren().slice(-1);
     this.hearts.remove(lastHeart, true, true);
+    return this.hearts.getChildren().length;
   };
 }
 

@@ -1,9 +1,10 @@
 import * as Phaser from 'phaser';
 import GameScene from './scenes/GameScene';
+import GameOverScene from './scenes/GameOverScene';
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Sample',
-  scene: GameScene,
+  scene: [GameScene, GameOverScene],
   type: Phaser.AUTO,
 
   scale: {
