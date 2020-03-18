@@ -1,12 +1,6 @@
 import * as Phaser from 'phaser';
 import { gameOptions } from '../scenes/GameScene';
 
-const vocabStyle = {
-  font: '16px Arial',
-  fill: '#ff0044',
-  align: 'center',
-};
-
 class HeartBar {
   private hearts: Phaser.GameObjects.Group;
 

@@ -219,7 +219,6 @@ class GameScene extends Phaser.Scene {
     const cursorKeys = this.input.keyboard.createCursorKeys();
     if (cursorKeys.right.isDown) {
       this.hero.body.setVelocityX(500);
-      this.heartBar.loseHeart();
     } else if (cursorKeys.left.isDown) {
       this.hero.body.setVelocityX(-500);
     } else {
