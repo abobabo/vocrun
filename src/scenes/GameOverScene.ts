@@ -58,6 +58,7 @@ class GameOverScene extends Phaser.Scene {
     this.load.image('stones', 'assets/img/stones.png');
     this.load.image('spoon', 'assets/img/spoon.png');
     this.load.image('golden turtle', 'assets/img/goldenturtle.png');
+    this.load.image('replay button', 'assets/img/replaybutton.png');
   }
 
   public create() {
@@ -87,6 +88,13 @@ class GameOverScene extends Phaser.Scene {
       reward,
     );
     rewardText.setOrigin(0.5);
+    const button = this.add.sprite(
+      window.innerWidth / 2,
+      window.innerHeight / 1.2,
+      'replay button',
+    );
+    button.setOrigin(0.5);
+    button.setInteractive().on('pointerdown', () => this.scene.start('Game'));
   }
 
   public update() {}
