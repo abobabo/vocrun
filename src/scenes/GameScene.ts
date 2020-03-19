@@ -3,22 +3,13 @@ import { VocabRoll } from '../classes';
 import VocabContainer from '../classes/VocabContainer';
 import HeartBar from '../classes/HeartBar';
 import Score from '../classes/Score';
+import { gameOptions } from '../config';
 import hsk4vocab from '../../assets/vocab/hsk4.json';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
   active: false,
   visible: false,
   key: 'Game',
-};
-
-export const gameOptions = {
-  barrierStartSpeed: 100,
-  barrierTimerDelay: 3000,
-  barrierLength: 5,
-  vocabContainerWidth: 120,
-  heartCount: 3,
-  heartWidth: 48,
-  correctVocabScore: 5,
 };
 
 const heroStyle = {

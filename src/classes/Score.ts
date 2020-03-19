@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { gameOptions } from '../scenes/GameScene';
+import { gameOptions } from '../config';
 
 const scoreStyle = {
   font: '16px Arial',
