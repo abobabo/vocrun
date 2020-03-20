@@ -105,13 +105,13 @@ class GameScene extends Phaser.Scene {
     barrierType: BarrierType,
     correctVocabIndex: number,
   ): VocabRoll[] => {
-    const remainingIndeces = [...Array(5).keys()].filter(
+    const incorrectIndeces = [...Array(5).keys()].filter(
       x => x != correctVocabIndex,
     );
     const vocabRollWithSpecialContainers = Object.assign({}, vocabRoll);
     switch (barrierType) {
       case BarrierType.JOKER:
-        vocabRollWithSpecialContainers[rollFromSet(remainingIndeces)].type =
+        vocabRollWithSpecialContainers[rollFromSet(incorrectIndeces)].type =
           ContainerType.JOKER;
         break;
       case BarrierType.ALL_WRONG:
@@ -119,7 +119,6 @@ class GameScene extends Phaser.Scene {
           Math.floor(Math.random() * (gameOptions.barrierLength - 1))
         ].type = ContainerType.ALL_WRONG;
         break;
-      default:
     }
     return vocabRollWithSpecialContainers;
   };
@@ -159,6 +158,19 @@ class GameScene extends Phaser.Scene {
         return `${hsk4vocab[vocabRoll.vocabId].hanzi} \n ${
           hsk4vocab[vocabRoll.vocabId].pinyin
         }`;
+      case ContainerType.JOKER:
+        return 'JOKER';
+      case ContainerType.JOKER:
+        return 'ALL WRONG';
+      default:
+        return '';
+    }
+  };
+
+  pickContainerSprite = (vocabRoll: VocabRoll) => {
+    switch (vocabRoll.type) {
+      case ContainerType.VANILLA:
+        return 'vocab';
       case ContainerType.JOKER:
         return 'JOKER';
       default:
