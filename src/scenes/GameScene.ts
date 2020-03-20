@@ -1,5 +1,10 @@
 import * as Phaser from 'phaser';
-import { VocabRoll } from '../classes';
+import {
+  VocabRoll,
+  BarrierType,
+  BarrierTypes,
+  ContainerType,
+} from '../classes';
 import VocabContainer from '../classes/VocabContainer';
 import HeartBar from '../classes/HeartBar';
 import Score from '../classes/Score';
@@ -18,6 +23,12 @@ const heroStyle = {
   wordWrap: true,
   align: 'center',
   backgroundColor: 'white',
+};
+
+const barrierTypeWeights = {
+  vanilla: 0.4,
+  allwrong: 0.3,
+  joker: 0.3,
 };
 
 class GameScene extends Phaser.Scene {
@@ -46,8 +57,17 @@ class GameScene extends Phaser.Scene {
 
   prepareBarrier = () => {
     const rolledVocabIds = this.rollVocabIds(gameOptions.barrierLength);
-    const vocabRoll = this.setCorrectVocab(rolledVocabIds);
-    this.addBarrier(vocabRoll);
+    const correctVocabIndex = Math.floor(
+      Math.random() * gameOptions.barrierLength,
+    );
+    const vocabRoll = this.setCorrectVocab(rolledVocabIds, correctVocabIndex);
+    const barrierType = BarrierTypes[this.rollWeighted(barrierTypeWeights)];
+    const vocabRollWithSpecials = this.rollSpecialContainers(
+      vocabRoll,
+      barrierType,
+      correctVocabIndex,
+    );
+    this.addBarrier(vocabRoll, BarrierTypes[barrierType]);
   };
 
   rollVocabIds = (vocabAmount: number): VocabRoll[] => {
@@ -64,9 +84,11 @@ class GameScene extends Phaser.Scene {
     return vocabRoll;
   };
 
-  setCorrectVocab = (vocabRoll: VocabRoll[]): VocabRoll[] => {
+  setCorrectVocab = (
+    vocabRoll: VocabRoll[],
+    correctVocabIndex: number,
+  ): VocabRoll[] => {
     const vocabRollWithCorrectVocab = Object.assign({}, vocabRoll);
-    const correctVocabIndex = Math.floor(Math.random() * vocabRoll.length);
     vocabRollWithCorrectVocab[correctVocabIndex].correct = true;
     this.vocabQueue.push(vocabRollWithCorrectVocab[correctVocabIndex].vocabId);
     if (!this.hero.text) {
@@ -76,7 +98,45 @@ class GameScene extends Phaser.Scene {
     return vocabRollWithCorrectVocab;
   };
 
-  addBarrier = (vocabRoll: VocabRoll[]) => {
+  rollFromSet = set => {
+    var rndm = Math.floor(Math.random() * set.length);
+    return set[rndm];
+  };
+
+  rollWeighted = weights => {
+    let i,
+      sum = 0,
+      r = Math.random();
+    for (i in weights) {
+      sum += weights[i];
+      if (r <= sum) return i;
+    }
+  };
+
+  rollSpecialContainers = (
+    vocabRoll: VocabRoll[],
+    barrierType: BarrierType,
+    correctVocabIndex: number,
+  ): VocabRoll[] => {
+    const remainingIndeces = [...Array(5).keys()].filter(
+      x => x != correctVocabIndex,
+    );
+    const vocabRollWithSpecialContainers = Object.assign({}, vocabRoll);
+    switch (barrierType) {
+      case BarrierType.JOKER:
+        vocabRollWithSpecialContainers[
+          this.rollFromSet(remainingIndeces)
+        ].type = ContainerType.JOKER;
+      case BarrierType.ALL_WRONG:
+        vocabRollWithSpecialContainers[
+          Math.floor(Math.random() * (gameOptions.barrierLength - 1))
+        ].type = ContainerType.ALL_WRONG;
+      default:
+    }
+    return vocabRollWithSpecialContainers;
+  };
+
+  addBarrier = (vocabRoll: VocabRoll[], barrierType: BarrierType) => {
     const barrierContainer = this.add.container(window.innerWidth / 2, 10, []);
     barrierContainer.setSize(
       gameOptions.vocabContainerWidth * gameOptions.barrierLength,
@@ -100,7 +160,6 @@ class GameScene extends Phaser.Scene {
       } else {
         this.addHeroCollision(vocabContainer, this.wrongVocabCollision);
       }
-
       barrierContainer.add(vocabContainer);
     }
     this.moveTowardsHero(barrierContainer, gameOptions.barrierStartSpeed);
