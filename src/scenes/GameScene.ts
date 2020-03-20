@@ -9,6 +9,7 @@ import VocabContainer from '../classes/VocabContainer';
 import HeartBar from '../classes/HeartBar';
 import Score from '../classes/Score';
 import { gameOptions } from '../config';
+import { rollFromSet, rollWeighted } from '../helpers';
 import hsk4vocab from '../../assets/vocab/hsk4.json';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
@@ -61,7 +62,7 @@ class GameScene extends Phaser.Scene {
       Math.random() * gameOptions.barrierLength,
     );
     const vocabRoll = this.setCorrectVocab(rolledVocabIds, correctVocabIndex);
-    const barrierType = BarrierTypes[this.rollWeighted(barrierTypeWeights)];
+    const barrierType = BarrierTypes[rollWeighted(barrierTypeWeights)];
     const vocabRollWithSpecials = this.rollSpecialContainers(
       vocabRoll,
       barrierType,
@@ -99,21 +100,6 @@ class GameScene extends Phaser.Scene {
     return vocabRollWithCorrectVocab;
   };
 
-  rollFromSet = set => {
-    var rndm = Math.floor(Math.random() * set.length);
-    return set[rndm];
-  };
-
-  rollWeighted = weights => {
-    let i,
-      sum = 0,
-      r = Math.random();
-    for (i in weights) {
-      sum += weights[i];
-      if (r <= sum) return i;
-    }
-  };
-
   rollSpecialContainers = (
     vocabRoll: VocabRoll[],
     barrierType: BarrierType,
@@ -125,9 +111,8 @@ class GameScene extends Phaser.Scene {
     const vocabRollWithSpecialContainers = Object.assign({}, vocabRoll);
     switch (barrierType) {
       case BarrierType.JOKER:
-        vocabRollWithSpecialContainers[
-          this.rollFromSet(remainingIndeces)
-        ].type = ContainerType.JOKER;
+        vocabRollWithSpecialContainers[rollFromSet(remainingIndeces)].type =
+          ContainerType.JOKER;
         break;
       case BarrierType.ALL_WRONG:
         vocabRollWithSpecialContainers[
