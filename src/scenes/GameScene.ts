@@ -67,7 +67,7 @@ class GameScene extends Phaser.Scene {
       barrierType,
       correctVocabIndex,
     );
-    this.addBarrier(vocabRoll, BarrierTypes[barrierType]);
+    this.addBarrier(vocabRollWithSpecials, BarrierTypes[barrierType]);
   };
 
   rollVocabIds = (vocabAmount: number): VocabRoll[] => {
@@ -79,6 +79,7 @@ class GameScene extends Phaser.Scene {
     const vocabRoll = vocabIdRoll.map(x => {
       return {
         vocabId: x,
+        type: ContainerType.VANILLA,
       };
     });
     return vocabRoll;
@@ -127,10 +128,12 @@ class GameScene extends Phaser.Scene {
         vocabRollWithSpecialContainers[
           this.rollFromSet(remainingIndeces)
         ].type = ContainerType.JOKER;
+        break;
       case BarrierType.ALL_WRONG:
         vocabRollWithSpecialContainers[
           Math.floor(Math.random() * (gameOptions.barrierLength - 1))
         ].type = ContainerType.ALL_WRONG;
+        break;
       default:
     }
     return vocabRollWithSpecialContainers;
@@ -150,9 +153,8 @@ class GameScene extends Phaser.Scene {
           gameOptions.vocabContainerWidth * i,
         0,
         gameOptions.vocabContainerWidth,
-        `${hsk4vocab[vocabRoll[i].vocabId].hanzi} \n ${
-          hsk4vocab[vocabRoll[i].vocabId].pinyin
-        }`,
+        this.pickContainerText(vocabRoll[i]),
+        'vocab',
       );
       this.physics.world.enable(vocabContainer);
       if (vocabRoll[i].correct) {
@@ -164,6 +166,19 @@ class GameScene extends Phaser.Scene {
     }
     this.moveTowardsHero(barrierContainer, gameOptions.barrierStartSpeed);
     this.children.bringToTop(this.hero);
+  };
+
+  pickContainerText = (vocabRoll: VocabRoll) => {
+    switch (vocabRoll.type) {
+      case ContainerType.VANILLA:
+        return `${hsk4vocab[vocabRoll.vocabId].hanzi} \n ${
+          hsk4vocab[vocabRoll.vocabId].pinyin
+        }`;
+      case ContainerType.JOKER:
+        return 'JOKER';
+      default:
+        return '';
+    }
   };
 
   addHeroCollision = (

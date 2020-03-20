@@ -7,12 +7,12 @@ const vocabStyle = {
 };
 
 class VocabContainer extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, width, vocab) {
+  constructor(scene, x, y, width, vocab, background) {
     const vocabSprite = new Phaser.Physics.Arcade.Sprite(
       scene,
       0,
       null,
-      'vocab',
+      background,
     );
     vocabSprite.displayHeight = width;
     vocabSprite.displayWidth = width;
