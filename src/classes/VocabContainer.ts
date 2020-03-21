@@ -1,9 +1,10 @@
 import * as Phaser from 'phaser';
 
 const vocabStyle = {
-  font: '16px Arial',
+  font: '18px Arial',
   fill: '#ff0044',
   align: 'center',
+  resolution: 3,
 };
 
 class VocabContainer extends Phaser.GameObjects.Container {

@@ -24,6 +24,7 @@ const heroStyle = {
   wordWrap: true,
   align: 'center',
   backgroundColor: 'white',
+  resolution: 3,
 };
 
 const barrierTypeWeights = {
