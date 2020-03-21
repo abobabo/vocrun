@@ -19,3 +19,4 @@ scripts/tsgen/test/bin/
 scripts/tsgen/test/output.txt
 
 plugins/spine/spine-runtimes/
+coverage/

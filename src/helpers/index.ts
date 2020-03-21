@@ -3,12 +3,12 @@ export const rollFromSet = set => {
   return set[rndm];
 };
 
-export const rollWeighted = weights => {
+export const rollWeighted = spec => {
   let i,
     sum = 0,
     r = Math.random();
-  for (i in weights) {
-    sum += weights[i];
+  for (i in spec) {
+    sum += spec[i];
     if (r <= sum) return i;
   }
 };
