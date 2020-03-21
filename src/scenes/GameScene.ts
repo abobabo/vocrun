@@ -123,7 +123,7 @@ class GameScene extends Phaser.Scene {
     return vocabRollWithSpecialContainers;
   };
 
-  addBarrier = (vocabRoll: VocabRoll[], barrierType: BarrierType) => {
+  addBarrier = (vocabRoll: VocabRoll[]) => {
     const barrierContainer = this.add.container(window.innerWidth / 2, 10, []);
     barrierContainer.setSize(
       gameOptions.vocabContainerWidth * gameOptions.barrierLength,
