@@ -138,10 +138,10 @@ class GameScene extends Phaser.Scene {
         0,
         gameOptions.vocabContainerWidth,
         this.pickContainerText(vocabRoll[i]),
-        'vocab',
+        this.pickContainerSprite(vocabRoll[i]),
       );
       this.physics.world.enable(vocabContainer);
-      if (vocabRoll[i].correct) {
+      if (vocabRoll[i].correct || vocabRoll[i].type == ContainerType.JOKER) {
         this.addHeroCollision(vocabContainer, this.correctVocabCollision);
       } else {
         this.addHeroCollision(vocabContainer, this.wrongVocabCollision);
@@ -160,7 +160,7 @@ class GameScene extends Phaser.Scene {
         }`;
       case ContainerType.JOKER:
         return 'JOKER';
-      case ContainerType.JOKER:
+      case ContainerType.ALL_WRONG:
         return 'ALL WRONG';
       default:
         return '';
@@ -172,7 +172,9 @@ class GameScene extends Phaser.Scene {
       case ContainerType.VANILLA:
         return 'vocab';
       case ContainerType.JOKER:
-        return 'JOKER';
+        return 'clown';
+      case ContainerType.ALL_WRONG:
+        return 'thunder';
       default:
         return '';
     }
@@ -244,6 +246,8 @@ class GameScene extends Phaser.Scene {
     });
     this.load.image('vocab', 'assets/img/platform.png');
     this.load.image('heart', 'assets/img/heart.png');
+    this.load.image('thunder', 'assets/img/thunder.png');
+    this.load.image('clown', 'assets/img/clown.png');
   }
 
   public create() {
