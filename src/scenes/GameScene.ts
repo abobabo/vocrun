@@ -68,7 +68,7 @@ class GameScene extends Phaser.Scene {
       barrierType,
       correctVocabIndex,
     );
-    this.addBarrier(vocabRollWithSpecials, BarrierTypes[barrierType]);
+    this.addBarrier(vocabRollWithSpecials);
   };
 
   rollVocabIds = (vocabAmount: number): VocabRoll[] => {
