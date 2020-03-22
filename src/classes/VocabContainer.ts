@@ -2,7 +2,7 @@ import * as Phaser from 'phaser';
 
 const vocabStyle = {
   font: '18px Arial',
-  fill: '#ff0044',
+  fill: 'white',
   align: 'center',
   resolution: 3,
 };
