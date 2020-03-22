@@ -36,7 +36,6 @@ const barrierTypeWeights = {
 class GameScene extends Phaser.Scene {
   private hero: Phaser.GameObjects.Text & {
     body: Phaser.Physics.Arcade.Body;
-    text: Phaser.GameObjects.Text;
   };
 
   private blooddrops: Phaser.GameObjects.Particles.ParticleEmitterManager;
@@ -52,6 +51,8 @@ class GameScene extends Phaser.Scene {
   private heartBar: HeartBar;
 
   private score: Score;
+
+  private wall;
 
   constructor() {
     super(sceneConfig);
@@ -232,8 +233,7 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.physics.world.enable(gameObject);
     const body = gameObject.body as Phaser.Physics.Arcade.Body;
-    body.setImmovable(true);
-    body.setVelocityY(speed);
+    body.setImmovable(true).setVelocityY(speed);
   };
 
   public preload() {
@@ -249,6 +249,7 @@ class GameScene extends Phaser.Scene {
     this.load.image('heart', 'assets/img/heart.png');
     this.load.image('thunder', 'assets/img/thunder.png');
     this.load.image('clown', 'assets/img/clown.png');
+    this.load.image('wall', 'assets/img/wall.png');
   }
 
   public create() {
@@ -282,15 +283,25 @@ class GameScene extends Phaser.Scene {
     ) as any;
     this.hero.setOrigin(0.5);
     this.physics.add.existing(this.hero);
-    this.hero.body.setImmovable(true);
+    this.hero.body
+      .setImmovable(true)
+      .setBounce(1, 1)
+      .setCollideWorldBounds(true);
     const barrierTimer = this.time.addEvent({
       delay: gameOptions.barrierTimerDelay,
       callback: this.prepareBarrier,
       loop: true,
     });
+    this.wall = this.physics.add
+      .image(200, 500, 'wall')
+      .setImmovable()
+      .setBounce(1, 1);
   }
 
   public update() {
+    this.physics.world.collide(this.wall, this.hero, function() {
+      console.log('hit?');
+    });
     const cursorKeys = this.input.keyboard.createCursorKeys();
     if (cursorKeys.right.isDown) {
       this.hero.body.setVelocityX(500);
