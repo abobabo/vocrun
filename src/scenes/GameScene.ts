@@ -33,6 +33,16 @@ const barrierTypeWeights = {
   joker: 0.3,
 };
 
+const emitterConf = {
+  frame: 0,
+  x: 400,
+  y: 300,
+  speed: 200,
+  frequency: 100,
+  lifespan: 600,
+  gravityY: 10,
+};
+
 class GameScene extends Phaser.Scene {
   private hero: Phaser.GameObjects.Text & {
     body: Phaser.Physics.Arcade.Body;
@@ -256,25 +266,9 @@ class GameScene extends Phaser.Scene {
     this.heartBar = new HeartBar(this, 0, 0, gameOptions.heartWidth);
     this.score = new Score(this, window.innerWidth - 20, 20);
     this.goldrings = this.add.particles('goldring');
-    this.correctVocabEmitter = this.goldrings.createEmitter({
-      frame: 0,
-      x: 400,
-      y: 300,
-      speed: 200,
-      frequency: 100,
-      lifespan: 600,
-      gravityY: 10,
-    });
+    this.correctVocabEmitter = this.goldrings.createEmitter(emitterConf);
     this.blooddrops = this.add.particles('blooddrop');
-    this.wrongVocabEmitter = this.blooddrops.createEmitter({
-      frame: 0,
-      x: 400,
-      y: 300,
-      speed: 200,
-      frequency: 100,
-      lifespan: 600,
-      gravityY: 10,
-    });
+    this.wrongVocabEmitter = this.blooddrops.createEmitter(emitterConf);
     this.hero = this.add.text(
       window.innerWidth / 2,
       window.innerHeight - 50,
@@ -283,19 +277,13 @@ class GameScene extends Phaser.Scene {
     ) as any;
     this.hero.setOrigin(0.5);
     this.physics.add.existing(this.hero);
-    this.hero.body
-      .setImmovable(true)
-      .setBounce(1, 1)
-      .setCollideWorldBounds(true);
+    this.hero.body.setBounce(1, 1);
     const barrierTimer = this.time.addEvent({
       delay: gameOptions.barrierTimerDelay,
       callback: this.prepareBarrier,
       loop: true,
     });
-    this.wall = this.physics.add
-      .image(200, 500, 'wall')
-      .setImmovable()
-      .setBounce(1, 1);
+    this.wall = this.physics.add.image(200, 500, 'wall').setImmovable();
   }
 
   public update() {
