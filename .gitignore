@@ -17,6 +17,7 @@ build/
 out/
 scripts/tsgen/test/bin/
 scripts/tsgen/test/output.txt
+dist
 
 plugins/spine/spine-runtimes/
 coverage/
