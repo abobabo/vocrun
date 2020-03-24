@@ -64,9 +64,9 @@ class GameScene extends Phaser.Scene {
 
   private score: Score;
 
-  private wall;
+  private currentCollider: uuid;
 
-  private currentCollider;
+  private hud: Phaser.GameObjects.Graphics;
 
   constructor() {
     super(sceneConfig);
@@ -183,7 +183,14 @@ class GameScene extends Phaser.Scene {
       barrierContainer.add(vocabContainer);
     }
     this.moveTowardsHero(barrierContainer, gameOptions.barrierStartSpeed);
+    this.depthSorting();
+  };
+
+  depthSorting = () => {
     this.children.bringToTop(this.hero);
+    this.children.bringToTop(this.hud);
+    this.children.bringToTop(this.score.getScoreText());
+    this.heartBar.bringToTop();
   };
 
   pickContainerText = (vocabRoll: VocabRoll) => {
@@ -284,11 +291,14 @@ class GameScene extends Phaser.Scene {
     this.load.image('heart', 'assets/img/heart.png');
     this.load.image('thunder', 'assets/img/thunder.png');
     this.load.image('clown', 'assets/img/clown.png');
-    this.load.image('wall', 'assets/img/wall.png');
   }
 
   public create() {
     this.currentCollider = uuidv4();
+    this.hud = this.add
+      .graphics()
+      .fillStyle(0x1111222, 1)
+      .fillRect(0, 0, window.innerWidth, gameOptions.heartWidth);
     this.heartBar = new HeartBar(this, 0, 0, gameOptions.heartWidth);
     this.score = new Score(this, window.innerWidth - 20, 20);
     this.goldrings = this.add.particles('goldring');

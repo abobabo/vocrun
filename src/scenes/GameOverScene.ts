@@ -51,7 +51,6 @@ class GameOverScene extends Phaser.Scene {
 
   init(data) {
     this.score = data.score;
-    console.log(this.score);
   }
 
   public preload() {

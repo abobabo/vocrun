@@ -8,28 +8,32 @@ const scoreStyle = {
 };
 
 class Score {
-  private scoreDisplay: Phaser.GameObjects.Text;
+  private scoreText: Phaser.GameObjects.Text;
   private score: number = 0;
+
+  getScoreText = () => {
+    return this.scoreText;
+  };
 
   getScore = () => {
     return this.score;
   };
 
   constructor(scene, x, y) {
-    this.scoreDisplay = new Phaser.GameObjects.Text(
+    this.scoreText = new Phaser.GameObjects.Text(
       scene,
       x,
       y,
       String(this.score),
       scoreStyle,
     );
-    scene.physics.add.existing(this.scoreDisplay);
-    this.scoreDisplay.setOrigin(1.0);
-    scene.add.existing(this.scoreDisplay);
+    scene.physics.add.existing(this.scoreText);
+    this.scoreText.setOrigin(1.0);
+    scene.add.existing(this.scoreText);
   }
 
   increase = () => {
-    this.scoreDisplay.setText(
+    this.scoreText.setText(
       String((this.score += gameOptions.correctVocabScore)),
     );
   };

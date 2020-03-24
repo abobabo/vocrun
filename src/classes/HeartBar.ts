@@ -4,6 +4,8 @@ import { gameOptions } from '../config';
 class HeartBar {
   private hearts: Phaser.GameObjects.Group;
 
+  private scene;
+
   constructor(scene, x, y, width) {
     const heartSprite = new Phaser.Physics.Arcade.Sprite(
       scene,
@@ -11,6 +13,7 @@ class HeartBar {
       null,
       'heart',
     );
+    this.scene = scene;
     heartSprite.displayHeight = width;
     heartSprite.displayWidth = width;
     this.hearts = scene.physics.add.group({ immovable: true });
@@ -23,6 +26,10 @@ class HeartBar {
     }
     scene.add.existing(this);
   }
+
+  bringToTop = () => {
+    this.hearts.getChildren().forEach(x => this.scene.children.bringToTop(x));
+  };
 
   loseHeart = () => {
     const [lastHeart] = this.hearts.getChildren().slice(-1);
