@@ -22,3 +22,8 @@ export enum ContainerType {
   ALL_WRONG,
   JOKER,
 }
+
+export interface TurnRoll {
+  vocabId: number;
+  colliderId: string;
+}

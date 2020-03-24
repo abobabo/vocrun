@@ -4,6 +4,7 @@ import {
   BarrierType,
   BarrierTypes,
   ContainerType,
+  TurnRoll,
 } from '../classes';
 import VocabContainer from '../classes/VocabContainer';
 import HeartBar from '../classes/HeartBar';
@@ -11,6 +12,7 @@ import Score from '../classes/Score';
 import { gameOptions } from '../config';
 import { rollFromSet, rollWeighted } from '../helpers';
 import hsk4vocab from '../../assets/vocab/hsk4.json';
+import { v4 as uuidv4 } from 'uuid';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
   active: false,
@@ -56,13 +58,15 @@ class GameScene extends Phaser.Scene {
 
   private correctVocabEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
-  private vocabQueue: number[] = [];
+  private turnQueue: TurnRoll[] = [];
 
   private heartBar: HeartBar;
 
   private score: Score;
 
   private wall;
+
+  private currentCollider;
 
   constructor() {
     super(sceneConfig);
@@ -73,14 +77,19 @@ class GameScene extends Phaser.Scene {
     const correctVocabIndex = Math.floor(
       Math.random() * gameOptions.barrierLength,
     );
-    const vocabRoll = this.setCorrectVocab(rolledVocabIds, correctVocabIndex);
+    const colliderId = uuidv4();
+    const vocabRoll = this.setCorrectVocab(
+      rolledVocabIds,
+      correctVocabIndex,
+      colliderId,
+    );
     const barrierType = BarrierTypes[rollWeighted(barrierTypeWeights)];
     const vocabRollWithSpecials = this.rollSpecialContainers(
       vocabRoll,
       barrierType,
       correctVocabIndex,
     );
-    this.addBarrier(vocabRollWithSpecials);
+    this.addBarrier(vocabRollWithSpecials, colliderId);
   };
 
   rollVocabIds = (vocabAmount: number): VocabRoll[] => {
@@ -101,13 +110,18 @@ class GameScene extends Phaser.Scene {
   setCorrectVocab = (
     vocabRoll: VocabRoll[],
     correctVocabIndex: number,
+    colliderId,
   ): VocabRoll[] => {
     const vocabRollWithCorrectVocab = Object.assign({}, vocabRoll);
     vocabRollWithCorrectVocab[correctVocabIndex].correct = true;
-    this.vocabQueue.push(vocabRollWithCorrectVocab[correctVocabIndex].vocabId);
+    this.turnQueue.push({
+      vocabId: vocabRollWithCorrectVocab[correctVocabIndex].vocabId,
+      colliderId: colliderId,
+    });
     if (!this.hero.text) {
-      const currentInQueue = this.vocabQueue.shift();
-      this.hero.setText(hsk4vocab[currentInQueue].translations[0]);
+      const firstInQueue = this.turnQueue.shift();
+      this.hero.setText(hsk4vocab[firstInQueue.vocabId].translations[0]);
+      this.currentCollider = firstInQueue.colliderId;
     }
     return vocabRollWithCorrectVocab;
   };
@@ -135,7 +149,7 @@ class GameScene extends Phaser.Scene {
     return vocabRollWithSpecialContainers;
   };
 
-  addBarrier = (vocabRoll: VocabRoll[]) => {
+  addBarrier = (vocabRoll: VocabRoll[], colliderId) => {
     const barrierContainer = this.add.container(window.innerWidth / 2, 10, []);
     barrierContainer.setSize(
       gameOptions.vocabContainerWidth * gameOptions.barrierLength,
@@ -154,9 +168,17 @@ class GameScene extends Phaser.Scene {
       );
       this.physics.world.enable(vocabContainer);
       if (vocabRoll[i].correct || vocabRoll[i].type == ContainerType.JOKER) {
-        this.addHeroCollision(vocabContainer, this.correctVocabCollision);
+        this.addHeroCollision(
+          vocabContainer,
+          this.correctVocabCollision,
+          colliderId,
+        );
       } else {
-        this.addHeroCollision(vocabContainer, this.wrongVocabCollision);
+        this.addHeroCollision(
+          vocabContainer,
+          this.wrongVocabCollision,
+          colliderId,
+        );
       }
       barrierContainer.add(vocabContainer);
     }
@@ -195,14 +217,16 @@ class GameScene extends Phaser.Scene {
   addHeroCollision = (
     gameObject: Phaser.GameObjects.GameObject,
     explodeOnCollide: any,
+    colliderName,
   ) => {
-    this.physics.add.collider(
+    const collider = this.physics.add.collider(
       this.hero,
       gameObject,
       explodeOnCollide,
       null,
       this,
     );
+    collider.setName(colliderName);
   };
 
   correctVocabCollision = (
@@ -211,12 +235,10 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.correctVocabEmitter.explode(50, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    const firsttInQueue = this.vocabQueue.shift();
-    this.physics.world.colliders
-      .getActive()
-      .reverse()
-      .splice(gameOptions.barrierLength);
-    this.hero.setText(hsk4vocab[firsttInQueue].translations[0]);
+    const firsttInQueue = this.turnQueue.shift();
+    this.removeBarrierColliders();
+    this.currentCollider = firsttInQueue.colliderId;
+    this.hero.setText(hsk4vocab[firsttInQueue.vocabId].translations[0]);
     this.score.increase();
   };
 
@@ -226,15 +248,18 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.wrongVocabEmitter.explode(30, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    const firsttInQueue = this.vocabQueue.shift();
-    this.physics.world.colliders
-      .getActive()
-      .reverse()
-      .splice(gameOptions.barrierLength);
-    this.hero.setText(hsk4vocab[firsttInQueue].translations[0]);
+    const firsttInQueue = this.turnQueue.shift();
+    this.removeBarrierColliders();
+    this.currentCollider = firsttInQueue.colliderId;
+    this.hero.setText(hsk4vocab[firsttInQueue.vocabId].translations[0]);
     if (!this.heartBar.loseHeart()) {
       this.scene.start('GameOver', { score: this.score.getScore() });
     }
+  };
+
+  removeBarrierColliders = () => {
+    const colliders = this.physics.world.colliders.getActive();
+    colliders.forEach(x => x.name === this.currentCollider && x.destroy());
   };
 
   moveTowardsHero = (
@@ -243,7 +268,7 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.physics.world.enable(gameObject);
     const body = gameObject.body as Phaser.Physics.Arcade.Body;
-    body.setImmovable(true).setVelocityY(speed);
+    body.setVelocityY(speed);
   };
 
   public preload() {
@@ -263,6 +288,7 @@ class GameScene extends Phaser.Scene {
   }
 
   public create() {
+    this.currentCollider = uuidv4();
     this.heartBar = new HeartBar(this, 0, 0, gameOptions.heartWidth);
     this.score = new Score(this, window.innerWidth - 20, 20);
     this.goldrings = this.add.particles('goldring');
@@ -277,19 +303,15 @@ class GameScene extends Phaser.Scene {
     ) as any;
     this.hero.setOrigin(0.5);
     this.physics.add.existing(this.hero);
-    this.hero.body.setBounce(1, 1);
     const barrierTimer = this.time.addEvent({
       delay: gameOptions.barrierTimerDelay,
       callback: this.prepareBarrier,
       loop: true,
     });
-    this.wall = this.physics.add.image(200, 500, 'wall').setImmovable();
+    this.hero.body.setCollideWorldBounds(true);
   }
 
   public update() {
-    this.physics.world.collide(this.wall, this.hero, function() {
-      console.log('hit?');
-    });
     const cursorKeys = this.input.keyboard.createCursorKeys();
     if (cursorKeys.right.isDown) {
       this.hero.body.setVelocityX(500);
