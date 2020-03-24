@@ -6,4 +6,6 @@ export const gameOptions = {
   heartCount: 3,
   heartWidth: 48,
   correctVocabScore: 5,
+  heroWidth: 80,
+  heroHeight: 40,
 };

@@ -9,6 +9,7 @@ import {
 import VocabContainer from '../classes/VocabContainer';
 import HeartBar from '../classes/HeartBar';
 import Score from '../classes/Score';
+import Hero from '../classes/Hero';
 import { gameOptions } from '../config';
 import { rollFromSet, rollWeighted } from '../helpers';
 import hsk4vocab from '../../assets/vocab/hsk4.json';
@@ -46,10 +47,7 @@ const emitterConf = {
 };
 
 class GameScene extends Phaser.Scene {
-  private hero: Phaser.GameObjects.Text & {
-    body: Phaser.Physics.Arcade.Body;
-  };
-
+  private hero: Hero;
   private blooddrops: Phaser.GameObjects.Particles.ParticleEmitterManager;
 
   private goldrings: Phaser.GameObjects.Particles.ParticleEmitterManager;
@@ -64,7 +62,7 @@ class GameScene extends Phaser.Scene {
 
   private score: Score;
 
-  private currentCollider: uuid;
+  private currentCollider;
 
   private hud: Phaser.GameObjects.Graphics;
 
@@ -118,9 +116,11 @@ class GameScene extends Phaser.Scene {
       vocabId: vocabRollWithCorrectVocab[correctVocabIndex].vocabId,
       colliderId: colliderId,
     });
-    if (!this.hero.text) {
+    if (!this.hero.vocabSourceText.text) {
       const firstInQueue = this.turnQueue.shift();
-      this.hero.setText(hsk4vocab[firstInQueue.vocabId].translations[0]);
+      this.hero.vocabSourceText.setText(
+        hsk4vocab[firstInQueue.vocabId].translations[0],
+      );
       this.currentCollider = firstInQueue.colliderId;
     }
     return vocabRollWithCorrectVocab;
@@ -245,7 +245,9 @@ class GameScene extends Phaser.Scene {
     const firsttInQueue = this.turnQueue.shift();
     this.removeBarrierColliders();
     this.currentCollider = firsttInQueue.colliderId;
-    this.hero.setText(hsk4vocab[firsttInQueue.vocabId].translations[0]);
+    this.hero.vocabSourceText.setText(
+      hsk4vocab[firsttInQueue.vocabId].translations[0],
+    );
     this.score.increase();
   };
 
@@ -258,7 +260,9 @@ class GameScene extends Phaser.Scene {
     const firsttInQueue = this.turnQueue.shift();
     this.removeBarrierColliders();
     this.currentCollider = firsttInQueue.colliderId;
-    this.hero.setText(hsk4vocab[firsttInQueue.vocabId].translations[0]);
+    this.hero.vocabSourceText.setText(
+      hsk4vocab[firsttInQueue.vocabId].translations[0],
+    );
     if (!this.heartBar.loseHeart()) {
       this.scene.start('GameOver', { score: this.score.getScore() });
     }
@@ -291,9 +295,19 @@ class GameScene extends Phaser.Scene {
     this.load.image('heart', 'assets/img/heart.png');
     this.load.image('thunder', 'assets/img/thunder.png');
     this.load.image('clown', 'assets/img/clown.png');
+    this.load.image('spike', 'assets/img/spike.png');
   }
 
   public create() {
+    this.hero = new Hero(
+      this,
+      window.innerWidth / 2,
+      window.innerHeight - 50,
+      gameOptions.heroWidth,
+      gameOptions.heroHeight,
+      '',
+      'spike',
+    );
     this.currentCollider = uuidv4();
     this.hud = this.add
       .graphics()
@@ -305,30 +319,25 @@ class GameScene extends Phaser.Scene {
     this.correctVocabEmitter = this.goldrings.createEmitter(emitterConf);
     this.blooddrops = this.add.particles('blooddrop');
     this.wrongVocabEmitter = this.blooddrops.createEmitter(emitterConf);
-    this.hero = this.add.text(
-      window.innerWidth / 2,
-      window.innerHeight - 50,
-      '',
-      heroStyle,
-    ) as any;
-    this.hero.setOrigin(0.5);
     this.physics.add.existing(this.hero);
     const barrierTimer = this.time.addEvent({
       delay: gameOptions.barrierTimerDelay,
       callback: this.prepareBarrier,
       loop: true,
     });
-    this.hero.body.setCollideWorldBounds(true);
+    const herobody = this.hero.body as Phaser.Physics.Arcade.Body;
+    herobody.setCollideWorldBounds(true);
   }
 
   public update() {
+    const herobody = this.hero.body as Phaser.Physics.Arcade.Body;
     const cursorKeys = this.input.keyboard.createCursorKeys();
     if (cursorKeys.right.isDown) {
-      this.hero.body.setVelocityX(500);
+      herobody.setVelocityX(500);
     } else if (cursorKeys.left.isDown) {
-      this.hero.body.setVelocityX(-500);
+      herobody.setVelocityX(-500);
     } else {
-      this.hero.body.setVelocityX(0);
+      herobody.setVelocityX(0);
     }
   }
 }
