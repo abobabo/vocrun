@@ -33,10 +33,11 @@
     "start": "yarn clean && yarn build && yarn compilecopystatic && node ./dist/index.js"
   },
   "dependencies": {
+    "@types/uuid": "^7.0.2",
+    "@types/jest": "^25.1.4",
     "typescript": "^3.8.3",
     "webpack": "^4.42.0",
     "webpack-cli": "^3.3.11",
-    "@types/uuid": "^7.0.2",
     "cookie-parser": "^1.4.5",
     "copy-webpack-plugin": "^5.1.1",
     "cors": "^2.8.5",
