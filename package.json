@@ -30,7 +30,7 @@
     "test": "jest --coverage",
     "clean": "rm -rf dist && mkdir dist",
     "compilecopystatic": "tsc ./src/index.ts && mv ./src/index.js ./dist",
-    "start": "npm run clean && npm run build && npm run compilecopystatic && node ./dist/index.js"
+    "start": "yarn clean && yarn build && yarn compilecopystatic && node ./dist/index.js"
   },
   "dependencies": {
     "typescript": "^3.8.3",
