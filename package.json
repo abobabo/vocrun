@@ -27,11 +27,17 @@
   "scripts": {
     "build": "webpack",
     "dev": "webpack-dev-server",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "clean": "rm -rf dist && mkdir dist",
+    "compilecopystatic": "tsc ./src/index.ts && mv ./src/index.js ./dist",
+    "start": "npm run clean && npm run build && npm run compilecopystatic && node ./dist/index.js"
   },
   "dependencies": {
     "@types/uuid": "^7.0.2",
+    "cookie-parser": "^1.4.5",
     "copy-webpack-plugin": "^5.1.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
     "phaser": "^3.22.0",
     "ts-loader": "^6.2.1",
     "uuid": "^7.0.2",
