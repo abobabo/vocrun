@@ -1,8 +1,8 @@
 export const gameOptions = {
   width: 800,
   height: window.innerHeight,
-  barrierStartSpeed: 100,
-  barrierTimerDelay: 3000,
+  barrierStartSpeed: 78,
+  barrierTimerDelay: 4500,
   barrierLength: 5,
   vocabContainerWidth: 800 / 5,
   heartCount: 3,

@@ -150,7 +150,11 @@ class GameScene extends Phaser.Scene {
   };
 
   addBarrier = (vocabRoll: VocabRoll[], colliderId) => {
-    const barrierContainer = this.add.container(gameOptions.width / 2, 10, []);
+    const barrierContainer = this.add.container(
+      gameOptions.width / 2,
+      -gameOptions.vocabContainerWidth,
+      [],
+    );
     barrierContainer.setSize(
       gameOptions.vocabContainerWidth * gameOptions.barrierLength,
       gameOptions.vocabContainerWidth,
