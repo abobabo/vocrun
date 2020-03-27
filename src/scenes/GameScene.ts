@@ -150,7 +150,7 @@ class GameScene extends Phaser.Scene {
   };
 
   addBarrier = (vocabRoll: VocabRoll[], colliderId) => {
-    const barrierContainer = this.add.container(window.innerWidth / 2, 10, []);
+    const barrierContainer = this.add.container(gameOptions.width / 2, 10, []);
     barrierContainer.setSize(
       gameOptions.vocabContainerWidth * gameOptions.barrierLength,
       gameOptions.vocabContainerWidth,
@@ -301,7 +301,7 @@ class GameScene extends Phaser.Scene {
   public create() {
     this.hero = new Hero(
       this,
-      window.innerWidth / 2,
+      gameOptions.width / 2,
       window.innerHeight - 50,
       gameOptions.heroWidth,
       gameOptions.heroHeight,
@@ -312,9 +312,9 @@ class GameScene extends Phaser.Scene {
     this.hud = this.add
       .graphics()
       .fillStyle(0x1111222, 1)
-      .fillRect(0, 0, window.innerWidth, gameOptions.heartWidth);
+      .fillRect(0, 0, gameOptions.width, gameOptions.heartWidth);
     this.heartBar = new HeartBar(this, 0, 0, gameOptions.heartWidth);
-    this.score = new Score(this, window.innerWidth - 20, 20);
+    this.score = new Score(this, gameOptions.width - 20, 20);
     this.goldrings = this.add.particles('goldring');
     this.correctVocabEmitter = this.goldrings.createEmitter(emitterConf).stop();
     this.blooddrops = this.add.particles('blooddrop');

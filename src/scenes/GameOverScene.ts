@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { gameOptions } from '../config';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
   active: false,
@@ -53,14 +54,14 @@ class GameOverScene extends Phaser.Scene {
 
   public create() {
     const score = this.add.text(
-      window.innerWidth / 2,
+      gameOptions.width / 2,
       window.innerHeight / 5,
       `your score: \n ${String(this.score)}`,
       scoreStyle,
     );
     score.setOrigin(0.5);
     const yourReward = this.add.text(
-      window.innerWidth / 2,
+      gameOptions.width / 2,
       window.innerHeight / 3,
       `your reward:`,
       textStyle,
@@ -68,18 +69,18 @@ class GameOverScene extends Phaser.Scene {
     yourReward.setOrigin(0.5);
     const reward = this.determineReward(this.score);
     const rewardImg = this.add.sprite(
-      window.innerWidth / 2,
+      gameOptions.width / 2,
       window.innerHeight / 2,
       reward,
     );
     const rewardText = this.add.text(
-      window.innerWidth / 2,
+      gameOptions.width / 2,
       window.innerHeight / 1.5,
       reward,
     );
     rewardText.setOrigin(0.5);
     const button = this.add.sprite(
-      window.innerWidth / 2,
+      gameOptions.width / 2,
       window.innerHeight / 1.2,
       'replay button',
     );
