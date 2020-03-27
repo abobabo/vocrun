@@ -27,7 +27,6 @@ class Score {
       String(this.score),
       scoreStyle,
     );
-    scene.physics.add.existing(this.scoreText);
     this.scoreText.setOrigin(1.0);
     scene.add.existing(this.scoreText);
   }
