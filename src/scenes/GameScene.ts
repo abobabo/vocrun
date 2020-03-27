@@ -316,9 +316,9 @@ class GameScene extends Phaser.Scene {
     this.heartBar = new HeartBar(this, 0, 0, gameOptions.heartWidth);
     this.score = new Score(this, window.innerWidth - 20, 20);
     this.goldrings = this.add.particles('goldring');
-    this.correctVocabEmitter = this.goldrings.createEmitter(emitterConf);
+    this.correctVocabEmitter = this.goldrings.createEmitter(emitterConf).stop();
     this.blooddrops = this.add.particles('blooddrop');
-    this.wrongVocabEmitter = this.blooddrops.createEmitter(emitterConf);
+    this.wrongVocabEmitter = this.blooddrops.createEmitter(emitterConf).stop();
     this.physics.add.existing(this.hero);
     const barrierTimer = this.time.addEvent({
       delay: gameOptions.barrierTimerDelay,
