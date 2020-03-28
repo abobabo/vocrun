@@ -1,11 +1,12 @@
 import * as Phaser from 'phaser';
 import GameScene from './scenes/GameScene';
 import GameOverScene from './scenes/GameOverScene';
+import LanguageSelection from './scenes/LanguageSelection';
 import { gameOptions } from './config';
 
 const gameConfig: Phaser.Types.Core.GameConfig = {
   title: 'Sample',
-  scene: [GameScene, GameOverScene],
+  scene: [LanguageSelection, GameScene, GameOverScene],
   type: Phaser.AUTO,
 
   scale: {

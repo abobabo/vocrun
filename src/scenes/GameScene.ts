@@ -331,6 +331,7 @@ class GameScene extends Phaser.Scene {
     });
     const herobody = this.hero.body as Phaser.Physics.Arcade.Body;
     herobody.setCollideWorldBounds(true);
+    this.prepareBarrier();
   }
 
   public update() {
