@@ -12,7 +12,6 @@ import Score from '../classes/Score';
 import Hero from '../classes/Hero';
 import { gameOptions } from '../config';
 import { rollFromSet, rollWeighted } from '../helpers';
-import hsk4vocab from '../../assets/vocab/hsk4.json';
 import { v4 as uuidv4 } from 'uuid';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
@@ -66,6 +65,8 @@ class GameScene extends Phaser.Scene {
 
   private hud: Phaser.GameObjects.Graphics;
 
+  private vocabulary;
+
   constructor() {
     super(sceneConfig);
   }
@@ -93,7 +94,7 @@ class GameScene extends Phaser.Scene {
   rollVocabIds = (vocabAmount: number): VocabRoll[] => {
     const vocabIdRoll: any[] = [];
     while (vocabIdRoll.length < vocabAmount) {
-      const roll = Math.floor(Math.random() * hsk4vocab.length);
+      const roll = Math.floor(Math.random() * this.vocabulary.length);
       if (vocabIdRoll.indexOf(roll) === -1) vocabIdRoll.push(roll);
     }
     const vocabRoll = vocabIdRoll.map(x => {
@@ -119,7 +120,7 @@ class GameScene extends Phaser.Scene {
     if (!this.hero.vocabSourceText.text) {
       const firstInQueue = this.turnQueue.shift();
       this.hero.vocabSourceText.setText(
-        hsk4vocab[firstInQueue.vocabId].translations[0],
+        this.vocabulary[firstInQueue.vocabId].translation,
       );
       this.currentCollider = firstInQueue.colliderId;
     }
@@ -200,9 +201,7 @@ class GameScene extends Phaser.Scene {
   pickContainerText = (vocabRoll: VocabRoll) => {
     switch (vocabRoll.type) {
       case ContainerType.VANILLA:
-        return `${hsk4vocab[vocabRoll.vocabId].hanzi} \n ${
-          hsk4vocab[vocabRoll.vocabId].pinyin
-        }`;
+        return `${this.vocabulary[vocabRoll.vocabId].source1}`;
       case ContainerType.JOKER:
         return 'JOKER';
       case ContainerType.ALL_WRONG:
@@ -250,7 +249,7 @@ class GameScene extends Phaser.Scene {
     this.removeBarrierColliders();
     this.currentCollider = firsttInQueue.colliderId;
     this.hero.vocabSourceText.setText(
-      hsk4vocab[firsttInQueue.vocabId].translations[0],
+      this.vocabulary[firsttInQueue.vocabId].translation,
     );
     this.score.increase();
   };
@@ -265,7 +264,7 @@ class GameScene extends Phaser.Scene {
     this.removeBarrierColliders();
     this.currentCollider = firsttInQueue.colliderId;
     this.hero.vocabSourceText.setText(
-      hsk4vocab[firsttInQueue.vocabId].translations[0],
+      this.vocabulary[firsttInQueue.vocabId].translation,
     );
     if (!this.heartBar.loseHeart()) {
       this.scene.start('GameOver', { score: this.score.getScore() });
@@ -300,6 +299,10 @@ class GameScene extends Phaser.Scene {
     this.load.image('thunder', 'assets/img/thunder.png');
     this.load.image('clown', 'assets/img/clown.png');
     this.load.image('spike', 'assets/img/spike.png');
+  }
+
+  init(data) {
+    this.vocabulary = data.vocabulary;
   }
 
   public create() {
