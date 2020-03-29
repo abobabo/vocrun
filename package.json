@@ -22,7 +22,8 @@
     "prettier": "^1.19.1",
     "serve": "^11.3.0",
     "source-map-support": "^0.5.16",
-    "ts-jest": "^25.2.1"
+    "ts-jest": "^25.2.1",
+    "csvtojson": "^2.0.10"
   },
   "scripts": {
     "build": "webpack",
