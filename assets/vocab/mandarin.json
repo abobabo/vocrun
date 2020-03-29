@@ -1,0 +1,76 @@
+[
+  {
+    "source1": "情况",
+    "source2": "qíng kuàng",
+    "translation": "circumstances"
+  },
+  {
+    "source1": "请假",
+    "source2": "qǐng jià",
+    "translation": "to request leave of absence"
+  },
+  {
+    "source1": "请客",
+    "source2": "qǐng kè",
+    "translation": "to give a dinner party"
+  },
+  { "source1": "穷", "source2": "qióng", "translation": "exhausted" },
+  { "source1": "区别", "source2": "qū bié", "translation": "difference" },
+  { "source1": "取", "source2": "qǔ", "translation": "to take" },
+  { "source1": "全部", "source2": "quán bù", "translation": "whole" },
+  { "source1": "缺点", "source2": "quē diǎn", "translation": "weak point" },
+  { "source1": "缺少", "source2": "quē shǎo", "translation": "lack" },
+  { "source1": "却", "source2": "què", "translation": "but" },
+  { "source1": "确实", "source2": "què shí", "translation": "indeed" },
+  { "source1": "群", "source2": "qún", "translation": "group" },
+  { "source1": "然而", "source2": "rán ér", "translation": "however" },
+  {
+    "source1": "热闹",
+    "source2": "rè nao",
+    "translation": "bustling with noise and excitement"
+  },
+  {
+    "source1": "人民币",
+    "source2": "rén mín bì",
+    "translation": "Renminbi (RMB)"
+  },
+  { "source1": "任何", "source2": "rèn hé", "translation": "any" },
+  { "source1": "任务", "source2": "rèn wu", "translation": "mission" },
+  { "source1": "扔", "source2": "rēng", "translation": "to throw" },
+  { "source1": "仍然", "source2": "réng rán", "translation": "still" },
+  { "source1": "日记", "source2": "rì jì", "translation": "diary" },
+  { "source1": "入口", "source2": "rù kǒu", "translation": "entrance" },
+  { "source1": "软", "source2": "ruǎn", "translation": "soft" },
+  { "source1": "散步", "source2": "sàn bù", "translation": "to take a walk" },
+  { "source1": "森林", "source2": "sēn lín", "translation": "forest" },
+  { "source1": "沙发", "source2": "shā fā", "translation": "sofa" },
+  { "source1": "商量", "source2": "shāng liang", "translation": "to consult" },
+  { "source1": "伤心", "source2": "shāng xīn", "translation": "to grieve" },
+  { "source1": "稍微", "source2": "shāo wēi", "translation": "a little bit" },
+  { "source1": "社会", "source2": "shè huì", "translation": "society" },
+  { "source1": "深", "source2": "shēn", "translation": "close" },
+  {
+    "source1": "申请",
+    "source2": "shēn qǐng",
+    "translation": "to apply for sth"
+  },
+  { "source1": "甚至", "source2": "shèn zhì", "translation": "even" },
+  { "source1": "生活", "source2": "shēng huó", "translation": "life" },
+  { "source1": "生命", "source2": "shēng mìng", "translation": "life" },
+  { "source1": "省", "source2": "shěng", "translation": "to save" },
+  { "source1": "剩", "source2": "shèng", "translation": "to remain" },
+  { "source1": "失败", "source2": "shī bài", "translation": "to be defeated" },
+  { "source1": "失望", "source2": "shī wàng", "translation": "disappointed" },
+  { "source1": "师傅", "source2": "shī fu", "translation": "master" },
+  { "source1": "湿润", "source2": "shī rùn", "translation": "moist" },
+  { "source1": "狮子", "source2": "shī zi", "translation": "lion" },
+  {
+    "source1": "十分",
+    "source2": "shí fēn",
+    "translation": "to divide into ten equal parts"
+  },
+  { "source1": "实际", "source2": "shí jì", "translation": "actual" },
+  { "source1": "实在", "source2": "shí zài", "translation": "really" },
+  { "source1": "食品", "source2": "shí pǐn", "translation": "foodstuff" },
+  { "source1": "使用", "source2": "shǐ yòng", "translation": "to use" }
+]
