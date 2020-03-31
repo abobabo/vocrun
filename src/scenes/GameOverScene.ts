@@ -50,38 +50,20 @@ class GameOverScene extends Phaser.Scene {
     this.load.image('spoon', 'assets/img/spoon.png');
     this.load.image('golden turtle', 'assets/img/goldenturtle.png');
     this.load.image('replay button', 'assets/img/replaybutton.png');
+    this.load.bitmapFont(
+      'atarisunset',
+      'assets/fonts/atari-sunset.png',
+      'assets/fonts/atari-sunset.xml',
+    );
   }
 
   public create() {
-    const score = this.add.text(
-      gameOptions.width / 2,
-      window.innerHeight / 5,
-      `your score: \n ${String(this.score)}`,
-      scoreStyle,
-    );
+    const score = this.add.bitmapText(gameOptions.width / 2, window.innerHeight / 5, 'atarisunset', 
+    `Score: ${String(this.score)}`, 30);
     score.setOrigin(0.5);
-    const yourReward = this.add.text(
-      gameOptions.width / 2,
-      window.innerHeight / 3,
-      `your reward:`,
-      textStyle,
-    );
-    yourReward.setOrigin(0.5);
-    const reward = this.determineReward(this.score);
-    const rewardImg = this.add.sprite(
-      gameOptions.width / 2,
-      window.innerHeight / 2,
-      reward,
-    );
-    const rewardText = this.add.text(
-      gameOptions.width / 2,
-      window.innerHeight / 1.5,
-      reward,
-    );
-    rewardText.setOrigin(0.5);
     const button = this.add.sprite(
       gameOptions.width / 2,
-      window.innerHeight / 1.2,
+      window.innerHeight / 2,
       'replay button',
     );
     button.setOrigin(0.5);
