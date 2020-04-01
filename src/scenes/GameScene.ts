@@ -11,7 +11,13 @@ import HeartBar from '../classes/HeartBar';
 import Score from '../classes/Score';
 import Hero from '../classes/Hero';
 import { gameOptions } from '../config';
-import { rollFromSet, rollWeighted } from '../helpers';
+import {
+  rollFromSet,
+  rollWeighted,
+  calculateVocabContainerHeight,
+  calculateBarrierDistance,
+  calculateBarriersPerScreen
+} from '../helpers';
 import { v4 as uuidv4 } from 'uuid';
 
 const sceneConfig: Phaser.Types.Scenes.SettingsConfig = {
@@ -67,12 +73,23 @@ class GameScene extends Phaser.Scene {
 
   private vocabulary;
 
+  
+  private vocabContainerWidth: number;
+  
+  private barrierDistance: number;
+  
+  private barriersPerScreen: number;
+
+  
+
   constructor() {
     super(sceneConfig);
   }
 
   prepareBarrier = (barrierY: number = 0) => {
-    const rolledVocabIds = this.rollVocabIds(gameOptions.vocabContainersPerBarrier);
+    const rolledVocabIds = this.rollVocabIds(
+      gameOptions.vocabContainersPerBarrier,
+    );
     const correctVocabIndex = Math.floor(
       Math.random() * gameOptions.vocabContainersPerBarrier,
     );
@@ -136,20 +153,13 @@ class GameScene extends Phaser.Scene {
         break;
       case BarrierType.ALL_WRONG:
         vocabRollWithSpecialContainers[
-          Math.floor(Math.random() * (gameOptions.vocabContainersPerBarrier - 1))
+          Math.floor(
+            Math.random() * (gameOptions.vocabContainersPerBarrier - 1),
+          )
         ].type = ContainerType.ALL_WRONG;
         break;
     }
     return vocabRollWithSpecialContainers;
-  };
-  
-
-
-
-  addInitialBarriers = () => {
-    for (let i = 0; i < 3; i++){
-      this.prepareBarrier(1500 - i * 500);
-    }   
   };
 
   addBarrier = (vocabRoll: VocabRoll[], colliderId, barrierY: number = 0) => {
@@ -159,15 +169,15 @@ class GameScene extends Phaser.Scene {
       [],
     );
     barrierContainer.setSize(
-      gameOptions.vocabContainerWidth * gameOptions.vocabContainersPerBarrier,
-      gameOptions.vocabContainerWidth,
+      this.vocabContainerWidth * gameOptions.vocabContainersPerBarrier,
+      this.vocabContainerWidth,
     );
     for (let i = 0; i < gameOptions.vocabContainersPerBarrier; i++) {
       const vocabContainer = new VocabContainer(
         this,
         -(barrierContainer.width / 2) +
-          gameOptions.vocabContainerWidth / 2 +
-          gameOptions.vocabContainerWidth * i,
+          this.vocabContainerWidth / 2 +
+          this.vocabContainerWidth * i,
         0,
         gameOptions.vocabContainerWidth,
         this.pickContainerText(vocabRoll[i]),
@@ -240,7 +250,6 @@ class GameScene extends Phaser.Scene {
     );
     collider.setName(colliderName);
   };
-   
 
   correctVocabCollision = (
     hero: Phaser.GameObjects.GameObject,
@@ -258,10 +267,9 @@ class GameScene extends Phaser.Scene {
     const firstInQueue = this.turnQueue.shift();
     this.hero.vocabSourceText.setText(
       this.vocabulary[firstInQueue.vocabId].translation,
-      );
-      this.currentCollider = firstInQueue.colliderId;
-    };
-
+    );
+    this.currentCollider = firstInQueue.colliderId;
+  };
 
   wrongVocabCollision = (
     hero: Phaser.GameObjects.GameObject,
@@ -310,8 +318,19 @@ class GameScene extends Phaser.Scene {
   init(data) {
     this.vocabulary = data.vocabulary;
   }
+  
+
+  addInitialBarriers = () => {
+    for (let i = 0; i < 3; i++) {
+      this.prepareBarrier(1500 - i * 500);
+    }
+  };
+
 
   public create() {
+    this.vocabContainerWidth = calculateVocabContainerHeight();
+    this.barrierDistance = calculateBarrierDistance(this.vocabContainerWidth);
+    this.barriersPerScreen = calculateBarriersPerScreen(this.vocabContainerWidth,this.barrierDistance);
     this.hero = new Hero(
       this,
       gameOptions.width / 2,

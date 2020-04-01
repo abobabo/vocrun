@@ -10,5 +10,5 @@ export const gameOptions = {
   correctVocabScore: 5,
   heroWidth: 80,
   heroHeight: 40,
-  barrierDistance: 200,
+  distanceFactor: 3,
 };
