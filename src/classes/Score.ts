@@ -8,7 +8,7 @@ const scoreStyle = {
 };
 
 class Score {
-  private scoreText: Phaser.GameObjects.Text;
+  private scoreText: Phaser.GameObjects.BitmapText;
   private score: number = 0;
 
   getScoreText = () => {
@@ -20,12 +20,13 @@ class Score {
   };
 
   constructor(scene, x, y) {
-    this.scoreText = new Phaser.GameObjects.Text(
+    this.scoreText = new Phaser.GameObjects.BitmapText(
       scene,
       x,
       y,
-      String(this.score),
-      scoreStyle,
+      'atarisunset',
+      `Score: ${String(this.score)}`,
+      28,
     );
     this.scoreText.setOrigin(1.0);
     scene.add.existing(this.scoreText);
@@ -33,7 +34,7 @@ class Score {
 
   increase = () => {
     this.scoreText.setText(
-      String((this.score += gameOptions.correctVocabScore)),
+      `Score: ${String((this.score += gameOptions.correctVocabScore))}`,
     );
   };
 }
