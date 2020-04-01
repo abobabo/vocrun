@@ -71,13 +71,13 @@ class GameScene extends Phaser.Scene {
     super(sceneConfig);
   }
 
-  prepareBarrier = () => {
+  prepareBarrier = async (barrierY: number = 0) => {
     const rolledVocabIds = this.rollVocabIds(gameOptions.barrierLength);
     const correctVocabIndex = Math.floor(
       Math.random() * gameOptions.barrierLength,
     );
     const colliderId = uuidv4();
-    const vocabRoll = this.setCorrectVocab(
+    const vocabRoll = await this.setCorrectVocab(
       rolledVocabIds,
       correctVocabIndex,
       colliderId,
@@ -88,7 +88,7 @@ class GameScene extends Phaser.Scene {
       barrierType,
       correctVocabIndex,
     );
-    this.addBarrier(vocabRollWithSpecials, colliderId);
+    this.addBarrier(vocabRollWithSpecials, colliderId, barrierY);
   };
 
   rollVocabIds = (vocabAmount: number): VocabRoll[] => {
@@ -106,24 +106,17 @@ class GameScene extends Phaser.Scene {
     return vocabRoll;
   };
 
-  setCorrectVocab = (
+  setCorrectVocab = async (
     vocabRoll: VocabRoll[],
     correctVocabIndex: number,
     colliderId,
-  ): VocabRoll[] => {
+  ) => {
     const vocabRollWithCorrectVocab = Object.assign({}, vocabRoll);
     vocabRollWithCorrectVocab[correctVocabIndex].correct = true;
     this.turnQueue.push({
       vocabId: vocabRollWithCorrectVocab[correctVocabIndex].vocabId,
       colliderId: colliderId,
     });
-    if (!this.hero.vocabSourceText.text) {
-      const firstInQueue = this.turnQueue.shift();
-      this.hero.vocabSourceText.setText(
-        this.vocabulary[firstInQueue.vocabId].translation,
-      );
-      this.currentCollider = firstInQueue.colliderId;
-    }
     return vocabRollWithCorrectVocab;
   };
 
@@ -149,11 +142,20 @@ class GameScene extends Phaser.Scene {
     }
     return vocabRollWithSpecialContainers;
   };
+  
 
-  addBarrier = (vocabRoll: VocabRoll[], colliderId) => {
+
+
+  addInitialBarriers = () => {
+    for (let i = 0; i < 3; i++){
+      this.prepareBarrier(1500 - i * 500);
+    }   
+  };
+
+  addBarrier = (vocabRoll: VocabRoll[], colliderId, barrierY: number = 0) => {
     const barrierContainer = this.add.container(
       gameOptions.width / 2,
-      -gameOptions.vocabContainerWidth,
+      barrierY,
       [],
     );
     barrierContainer.setSize(
@@ -238,6 +240,7 @@ class GameScene extends Phaser.Scene {
     );
     collider.setName(colliderName);
   };
+   
 
   correctVocabCollision = (
     hero: Phaser.GameObjects.GameObject,
@@ -245,14 +248,20 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.correctVocabEmitter.explode(50, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    const firsttInQueue = this.turnQueue.shift();
     this.removeBarrierColliders();
-    this.currentCollider = firsttInQueue.colliderId;
-    this.hero.vocabSourceText.setText(
-      this.vocabulary[firsttInQueue.vocabId].translation,
-    );
+    this.setHeroText();
     this.score.increase();
+    this.prepareBarrier();
   };
+
+  setHeroText = () => {
+    const firstInQueue = this.turnQueue.shift();
+    this.hero.vocabSourceText.setText(
+      this.vocabulary[firstInQueue.vocabId].translation,
+      );
+      this.currentCollider = firstInQueue.colliderId;
+    };
+
 
   wrongVocabCollision = (
     hero: Phaser.GameObjects.GameObject,
@@ -260,15 +269,12 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.wrongVocabEmitter.explode(30, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    const firsttInQueue = this.turnQueue.shift();
     this.removeBarrierColliders();
-    this.currentCollider = firsttInQueue.colliderId;
-    this.hero.vocabSourceText.setText(
-      this.vocabulary[firsttInQueue.vocabId].translation,
-    );
+    this.setHeroText();
     if (!this.heartBar.loseHeart()) {
       this.scene.start('GameOver', { score: this.score.getScore() });
     }
+    this.prepareBarrier();
   };
 
   removeBarrierColliders = () => {
@@ -327,14 +333,10 @@ class GameScene extends Phaser.Scene {
     this.blooddrops = this.add.particles('blooddrop');
     this.wrongVocabEmitter = this.blooddrops.createEmitter(emitterConf).stop();
     this.physics.add.existing(this.hero);
-    const barrierTimer = this.time.addEvent({
-      delay: gameOptions.barrierTimerDelay,
-      callback: this.prepareBarrier,
-      loop: true,
-    });
     const herobody = this.hero.body as Phaser.Physics.Arcade.Body;
     herobody.setCollideWorldBounds(true);
-    this.prepareBarrier();
+    this.addInitialBarriers();
+    this.setHeroText();
   }
 
   public update() {
