@@ -16,7 +16,7 @@ import {
   rollWeighted,
   calculateVocabContainerHeight,
   calculateBarrierDistance,
-  calculateBarriersPerScreen
+  calculateBarriersPerScreen,
 } from '../helpers';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -73,20 +73,17 @@ class GameScene extends Phaser.Scene {
 
   private vocabulary;
 
-  
   private vocabContainerWidth: number;
-  
-  private barrierDistance: number;
-  
-  private barriersPerScreen: number;
 
-  
+  private barrierDistance: number;
+
+  private barriersPerScreen: number;
 
   constructor() {
     super(sceneConfig);
   }
 
-  prepareBarrier = (barrierY: number = 0) => {
+  prepareBarrier = (barrierY: number = -this.vocabContainerWidth) => {
     const rolledVocabIds = this.rollVocabIds(
       gameOptions.vocabContainersPerBarrier,
     );
@@ -162,7 +159,7 @@ class GameScene extends Phaser.Scene {
     return vocabRollWithSpecialContainers;
   };
 
-  addBarrier = (vocabRoll: VocabRoll[], colliderId, barrierY: number = 0) => {
+  addBarrier = (vocabRoll: VocabRoll[], colliderId, barrierY: number) => {
     const barrierContainer = this.add.container(
       gameOptions.width / 2,
       barrierY,
@@ -258,9 +255,9 @@ class GameScene extends Phaser.Scene {
     this.correctVocabEmitter.explode(50, this.hero.x, this.hero.y);
     vocabContainer.destroy();
     this.removeBarrierColliders();
-    this.setHeroText();
     this.score.increase();
     this.prepareBarrier();
+    this.setHeroText();
   };
 
   setHeroText = () => {
@@ -278,11 +275,11 @@ class GameScene extends Phaser.Scene {
     this.wrongVocabEmitter.explode(30, this.hero.x, this.hero.y);
     vocabContainer.destroy();
     this.removeBarrierColliders();
+    this.prepareBarrier();
     this.setHeroText();
     if (!this.heartBar.loseHeart()) {
       this.scene.start('GameOver', { score: this.score.getScore() });
     }
-    this.prepareBarrier();
   };
 
   removeBarrierColliders = () => {
@@ -318,19 +315,28 @@ class GameScene extends Phaser.Scene {
   init(data) {
     this.vocabulary = data.vocabulary;
   }
-  
 
   addInitialBarriers = () => {
-    for (let i = 0; i < 3; i++) {
-      this.prepareBarrier(1500 - i * 500);
+    for (let i = 0; i < this.barriersPerScreen; i++) {
+      let position = this.vocabContainerWidth / 2 + i * this.barrierDistance;
+      this.prepareBarrier(
+        -(
+          this.vocabContainerWidth / 2 +
+          i * (this.barrierDistance + this.vocabContainerWidth)
+        ),
+      );
     }
   };
-
 
   public create() {
     this.vocabContainerWidth = calculateVocabContainerHeight();
     this.barrierDistance = calculateBarrierDistance(this.vocabContainerWidth);
-    this.barriersPerScreen = calculateBarriersPerScreen(this.vocabContainerWidth,this.barrierDistance);
+    console.log(this.barrierDistance);
+    this.barriersPerScreen = calculateBarriersPerScreen(
+      this.vocabContainerWidth,
+      this.barrierDistance,
+    );
+    console.log(this.barriersPerScreen);
     this.hero = new Hero(
       this,
       gameOptions.width / 2,
