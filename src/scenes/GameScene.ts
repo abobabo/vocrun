@@ -72,9 +72,9 @@ class GameScene extends Phaser.Scene {
   }
 
   prepareBarrier = (barrierY: number = 0) => {
-    const rolledVocabIds = this.rollVocabIds(gameOptions.barrierLength);
+    const rolledVocabIds = this.rollVocabIds(gameOptions.vocabContainersPerBarrier);
     const correctVocabIndex = Math.floor(
-      Math.random() * gameOptions.barrierLength,
+      Math.random() * gameOptions.vocabContainersPerBarrier,
     );
     const colliderId = uuidv4();
     const vocabRoll = this.setCorrectVocab(
@@ -136,7 +136,7 @@ class GameScene extends Phaser.Scene {
         break;
       case BarrierType.ALL_WRONG:
         vocabRollWithSpecialContainers[
-          Math.floor(Math.random() * (gameOptions.barrierLength - 1))
+          Math.floor(Math.random() * (gameOptions.vocabContainersPerBarrier - 1))
         ].type = ContainerType.ALL_WRONG;
         break;
     }
@@ -159,10 +159,10 @@ class GameScene extends Phaser.Scene {
       [],
     );
     barrierContainer.setSize(
-      gameOptions.vocabContainerWidth * gameOptions.barrierLength,
+      gameOptions.vocabContainerWidth * gameOptions.vocabContainersPerBarrier,
       gameOptions.vocabContainerWidth,
     );
-    for (let i = 0; i < gameOptions.barrierLength; i++) {
+    for (let i = 0; i < gameOptions.vocabContainersPerBarrier; i++) {
       const vocabContainer = new VocabContainer(
         this,
         -(barrierContainer.width / 2) +
