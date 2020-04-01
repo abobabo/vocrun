@@ -71,13 +71,13 @@ class GameScene extends Phaser.Scene {
     super(sceneConfig);
   }
 
-  prepareBarrier = async (barrierY: number = 0) => {
+  prepareBarrier = (barrierY: number = 0) => {
     const rolledVocabIds = this.rollVocabIds(gameOptions.barrierLength);
     const correctVocabIndex = Math.floor(
       Math.random() * gameOptions.barrierLength,
     );
     const colliderId = uuidv4();
-    const vocabRoll = await this.setCorrectVocab(
+    const vocabRoll = this.setCorrectVocab(
       rolledVocabIds,
       correctVocabIndex,
       colliderId,
@@ -106,7 +106,7 @@ class GameScene extends Phaser.Scene {
     return vocabRoll;
   };
 
-  setCorrectVocab = async (
+  setCorrectVocab = (
     vocabRoll: VocabRoll[],
     correctVocabIndex: number,
     colliderId,
