@@ -37,9 +37,9 @@ const heroStyle = {
 };
 
 const barrierTypeWeights = {
-  vanilla: 0.0,
-  allwrong: 0.0,
-  joker: 1.0,
+  vanilla: 0.6,
+  allwrong: 0.2,
+  joker: 0.2,
 };
 
 const emitterConf = {
