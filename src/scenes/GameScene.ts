@@ -181,7 +181,7 @@ class GameScene extends Phaser.Scene {
           this.vocabContainerWidth / 2 +
           this.vocabContainerWidth * i,
         0,
-        gameOptions.vocabContainerWidth,
+        this.vocabContainerWidth,
         this.pickContainerText(vocabRoll[i]),
         this.pickContainerSprite(vocabRoll[i]),
       );
@@ -400,11 +400,15 @@ class GameScene extends Phaser.Scene {
     herobody.setCollideWorldBounds(true);
     this.addInitialBarriers();
     this.setHeroText();
+    const pointer = this.input.addPointer();
   }
 
   public update() {
     const herobody = this.hero.body as Phaser.Physics.Arcade.Body;
     const cursorKeys = this.input.keyboard.createCursorKeys();
+    if (this.input.pointer1.isDown) {
+      this.hero.setX(this.input.pointer1.x);
+    }
     if (cursorKeys.right.isDown) {
       herobody.setVelocityX(500);
     } else if (cursorKeys.left.isDown) {
