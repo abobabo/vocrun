@@ -293,6 +293,7 @@ class GameScene extends Phaser.Scene {
   switchToNextBarrier = () => {
     this.removeBarrierColliders();
     this.prepareBarrier();
+    this.destroyOldBarrier();
     this.setHeroText();
   };
 
@@ -311,7 +312,14 @@ class GameScene extends Phaser.Scene {
       const body = x.body as Phaser.Physics.Arcade.Body;
       body.setVelocityY(this.barrierSpeed);
     });
-    const timer = this.time.delayedCall(8000, this.resetBarrierSpeed);
+    const timer = this.time.delayedCall(5000, this.resetBarrierSpeed);
+  };
+
+  destroyOldBarrier = () => {
+    if (this.barrierGroup.getChildren().length > this.barriersPerScreen + 1) {
+      const oldBarrier = this.barrierGroup.getChildren().shift();
+      oldBarrier.destroy();
+    }
   };
 
   removeBarrierColliders = () => {
