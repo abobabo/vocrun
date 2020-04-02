@@ -17,6 +17,7 @@ import {
   calculateVocabContainerHeight,
   calculateBarrierDistance,
   calculateBarriersPerScreen,
+  calculateRandomExtraDistance,
 } from '../helpers';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -162,7 +163,7 @@ class GameScene extends Phaser.Scene {
   addBarrier = (vocabRoll: VocabRoll[], colliderId, barrierY: number) => {
     const barrierContainer = this.add.container(
       gameOptions.width / 2,
-      barrierY,
+      barrierY + calculateRandomExtraDistance(this.barrierDistance),
       [],
     );
     barrierContainer.setSize(

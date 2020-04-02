@@ -3,7 +3,8 @@ import {
   rollWeighted,
   calculateVocabContainerHeight,
   calculateBarrierDistance,
-  calculateBarriersPerScreen
+  calculateBarriersPerScreen,
+  calculateRandomExtraDistance,
 } from '../helpers';
 it('should randomly pick a number from a set', () => {
   const set = [42, 420, 69, 47, 27];
@@ -14,11 +15,21 @@ it('should randomly pick a number from spec with probability according to given 
   expect(rollWeighted(spec)).toBe('1');
 });
 it('calculate correct barrier height', () => {
-  expect(calculateVocabContainerHeight(800,5)).toBe(160);
+  expect(calculateVocabContainerHeight(800, 5)).toBe(160);
 });
 it('calculate correct barrier distance', () => {
-  expect((calculateBarrierDistance(100,2))).toBe(200);
+  expect(calculateBarrierDistance(100, 2)).toBe(200);
 });
 it('calculate correct barriers per screen', () => {
-  expect((calculateBarriersPerScreen(100,200,1200))).toBe(4);
+  expect(calculateBarriersPerScreen(100, 200, 1200)).toBe(4);
+});
+it('calculate correct barriers per screen', () => {
+  console.log(calculateRandomExtraDistance(100));
+  console.log(calculateRandomExtraDistance(100));
+  console.log(calculateRandomExtraDistance(100));
+  console.log(calculateRandomExtraDistance(100));
+  console.log(calculateRandomExtraDistance(100));
+  console.log(calculateRandomExtraDistance(100));
+  console.log(calculateRandomExtraDistance(100));
+  console.log(calculateRandomExtraDistance(100));
 });

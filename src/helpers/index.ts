@@ -48,3 +48,7 @@ export const calculateBarrierDistance = (
 ) => {
   return containerHeight * distanceFactor;
 };
+
+export const calculateRandomExtraDistance = (barrierDistance: number) => {
+  return Math.floor((Math.random() * barrierDistance) / 2);
+};
