@@ -80,6 +80,8 @@ class GameScene extends Phaser.Scene {
 
   private barrierSpeed: number;
 
+  private barrierGroup = new Phaser.GameObjects.Group(this);
+
   private vocabulary;
 
   constructor() {
@@ -201,6 +203,7 @@ class GameScene extends Phaser.Scene {
       }
       barrierContainer.add(vocabContainer);
     }
+    this.barrierGroup.add(barrierContainer);
     this.moveTowardsHero(barrierContainer, this.barrierSpeed);
     this.depthSorting();
   };
@@ -303,8 +306,12 @@ class GameScene extends Phaser.Scene {
   };
 
   speedUpBarriers = () => {
-    this.barrierSpeed = this.barrierSpeed * 4.0;
-    const timer = this.time.delayedCall(5000, this.resetBarrierSpeed);
+    this.barrierSpeed = this.barrierSpeed * 2.0;
+    this.barrierGroup.getChildren().forEach(x => {
+      const body = x.body as Phaser.Physics.Arcade.Body;
+      body.setVelocityY(this.barrierSpeed);
+    });
+    const timer = this.time.delayedCall(8000, this.resetBarrierSpeed);
   };
 
   removeBarrierColliders = () => {
