@@ -37,9 +37,9 @@ const heroStyle = {
 };
 
 const barrierTypeWeights = {
-  vanilla: 0.4,
-  allwrong: 0.3,
-  joker: 0.3,
+  vanilla: 0.0,
+  allwrong: 0.0,
+  joker: 1.0,
 };
 
 const emitterConf = {
@@ -72,13 +72,15 @@ class GameScene extends Phaser.Scene {
 
   private hud: Phaser.GameObjects.Graphics;
 
-  private vocabulary;
-
   private vocabContainerWidth: number;
 
   private barrierDistance: number;
 
   private barriersPerScreen: number;
+
+  private barrierSpeed: number;
+
+  private vocabulary;
 
   constructor() {
     super(sceneConfig);
@@ -182,12 +184,14 @@ class GameScene extends Phaser.Scene {
         this.pickContainerSprite(vocabRoll[i]),
       );
       this.physics.world.enable(vocabContainer);
-      if (vocabRoll[i].correct || vocabRoll[i].type == ContainerType.JOKER) {
+      if (vocabRoll[i].correct) {
         this.addHeroCollision(
           vocabContainer,
           this.correctVocabCollision,
           colliderId,
         );
+      } else if (vocabRoll[i].type == ContainerType.JOKER) {
+        this.addHeroCollision(vocabContainer, this.jokerCollision, colliderId);
       } else {
         this.addHeroCollision(
           vocabContainer,
@@ -197,8 +201,12 @@ class GameScene extends Phaser.Scene {
       }
       barrierContainer.add(vocabContainer);
     }
-    this.moveTowardsHero(barrierContainer, gameOptions.barrierStartSpeed);
+    this.moveTowardsHero(barrierContainer, this.barrierSpeed);
     this.depthSorting();
+  };
+
+  resetBarrierSpeed = () => {
+    this.barrierSpeed = gameOptions.barrierStartSpeed;
   };
 
   depthSorting = () => {
@@ -255,10 +263,8 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.correctVocabEmitter.explode(50, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    this.removeBarrierColliders();
+    this.switchToNextBarrier();
     this.score.increase();
-    this.prepareBarrier();
-    this.setHeroText();
   };
 
   setHeroText = () => {
@@ -275,12 +281,30 @@ class GameScene extends Phaser.Scene {
   ) => {
     this.wrongVocabEmitter.explode(30, this.hero.x, this.hero.y);
     vocabContainer.destroy();
-    this.removeBarrierColliders();
-    this.prepareBarrier();
-    this.setHeroText();
+    this.switchToNextBarrier();
     if (!this.heartBar.loseHeart()) {
       this.scene.start('GameOver', { score: this.score.getScore() });
     }
+  };
+
+  switchToNextBarrier = () => {
+    this.removeBarrierColliders();
+    this.prepareBarrier();
+    this.setHeroText();
+  };
+
+  jokerCollision = (
+    hero: Phaser.GameObjects.GameObject,
+    vocabContainer: Phaser.GameObjects.GameObject,
+  ) => {
+    vocabContainer.destroy();
+    this.switchToNextBarrier();
+    this.speedUpBarriers();
+  };
+
+  speedUpBarriers = () => {
+    this.barrierSpeed = this.barrierSpeed * 4.0;
+    const timer = this.time.delayedCall(5000, this.resetBarrierSpeed);
   };
 
   removeBarrierColliders = () => {
@@ -328,16 +352,14 @@ class GameScene extends Phaser.Scene {
       );
     }
   };
-
   public create() {
+    this.barrierSpeed = gameOptions.barrierStartSpeed;
     this.vocabContainerWidth = calculateVocabContainerHeight();
     this.barrierDistance = calculateBarrierDistance(this.vocabContainerWidth);
-    console.log(this.barrierDistance);
     this.barriersPerScreen = calculateBarriersPerScreen(
       this.vocabContainerWidth,
       this.barrierDistance,
     );
-    console.log(this.barriersPerScreen);
     this.hero = new Hero(
       this,
       gameOptions.width / 2,
