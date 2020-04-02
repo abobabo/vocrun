@@ -9,5 +9,5 @@ export const gameOptions = {
   correctVocabScore: 5,
   heroWidth: 80,
   heroHeight: 40,
-  distanceFactor: 1,
+  distanceFactor: 2,
 };
