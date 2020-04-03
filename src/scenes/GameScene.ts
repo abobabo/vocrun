@@ -37,9 +37,9 @@ const heroStyle = {
 };
 
 const barrierTypeWeights = {
-  vanilla: 0.6,
-  allwrong: 0.2,
-  joker: 0.2,
+  vanilla: 0.4,
+  allwrong: 0.3,
+  joker: 0.3,
 };
 
 const emitterConf = {
@@ -54,13 +54,18 @@ const emitterConf = {
 
 class GameScene extends Phaser.Scene {
   private hero: Hero;
-  private blooddrops: Phaser.GameObjects.Particles.ParticleEmitterManager;
 
-  private goldrings: Phaser.GameObjects.Particles.ParticleEmitterManager;
+  private wrongVocabParticles: Phaser.GameObjects.Particles.ParticleEmitterManager;
 
   private wrongVocabEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
+  private correctVocabParticles: Phaser.GameObjects.Particles.ParticleEmitterManager;
+
   private correctVocabEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
+
+  private jokerParticles: Phaser.GameObjects.Particles.ParticleEmitterManager;
+
+  private jokerEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
   private turnQueue: TurnRoll[] = [];
 
@@ -301,13 +306,14 @@ class GameScene extends Phaser.Scene {
     hero: Phaser.GameObjects.GameObject,
     vocabContainer: Phaser.GameObjects.GameObject,
   ) => {
+    this.jokerEmitter.explode(30, this.hero.x, this.hero.y);
     vocabContainer.destroy();
     this.switchToNextBarrier();
     this.speedUpBarriers();
   };
 
   speedUpBarriers = () => {
-    this.barrierSpeed = this.barrierSpeed * 2.0;
+    this.barrierSpeed = this.barrierSpeed * 1.5;
     this.barrierGroup.getChildren().forEach(x => {
       const body = x.body as Phaser.Physics.Arcade.Body;
       body.setVelocityY(this.barrierSpeed);
@@ -316,7 +322,7 @@ class GameScene extends Phaser.Scene {
   };
 
   destroyOldBarrier = () => {
-    if (this.barrierGroup.getChildren().length > this.barriersPerScreen + 1) {
+    if (this.barrierGroup.getChildren().length > this.barriersPerScreen + 3) {
       const oldBarrier = this.barrierGroup.getChildren().shift();
       oldBarrier.destroy();
     }
@@ -341,9 +347,21 @@ class GameScene extends Phaser.Scene {
       frameWidth: 64,
       frameHeight: 64,
     });
-    this.load.spritesheet('goldring', 'assets/img/goldring.png', {
-      frameWidth: 64,
-      frameHeight: 64,
+    this.load.spritesheet(
+      'correctvocabemit',
+      'assets/img/correctvocabemit.png',
+      {
+        frameWidth: 48,
+        frameHeight: 48,
+      },
+    );
+    this.load.spritesheet('allwrongemit', 'assets/img/allwrongemit.png', {
+      frameWidth: 48,
+      frameHeight: 48,
+    });
+    this.load.spritesheet('jokeremit', 'assets/img/jokeremit.png', {
+      frameWidth: 48,
+      frameHeight: 48,
     });
     this.load.image('vocab', 'assets/img/platform.png');
     this.load.image('heart', 'assets/img/heart.png');
@@ -391,10 +409,20 @@ class GameScene extends Phaser.Scene {
       .fillRect(0, 0, gameOptions.width, gameOptions.heartWidth);
     this.heartBar = new HeartBar(this, 0, 0, gameOptions.heartWidth);
     this.score = new Score(this, gameOptions.width, gameOptions.heartWidth);
-    this.goldrings = this.add.particles('goldring');
-    this.correctVocabEmitter = this.goldrings.createEmitter(emitterConf).stop();
-    this.blooddrops = this.add.particles('blooddrop');
-    this.wrongVocabEmitter = this.blooddrops.createEmitter(emitterConf).stop();
+
+    this.correctVocabParticles = this.add.particles('correctvocabemit');
+    this.correctVocabEmitter = this.correctVocabParticles
+      .createEmitter(emitterConf)
+      .stop();
+
+    this.wrongVocabParticles = this.add.particles('blooddrop');
+    this.wrongVocabEmitter = this.wrongVocabParticles
+      .createEmitter(emitterConf)
+      .stop();
+
+    this.jokerParticles = this.add.particles('jokeremit');
+    this.jokerEmitter = this.jokerParticles.createEmitter(emitterConf).stop();
+
     this.physics.add.existing(this.hero);
     const herobody = this.hero.body as Phaser.Physics.Arcade.Body;
     herobody.setCollideWorldBounds(true);
