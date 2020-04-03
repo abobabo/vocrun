@@ -231,7 +231,7 @@ class GameScene extends Phaser.Scene {
       case ContainerType.JOKER:
         return 'JOKER';
       case ContainerType.ALL_WRONG:
-        return 'ALL WRONG';
+        return `ALL \n WRONG`;
       default:
         return '';
     }
