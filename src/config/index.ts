@@ -10,5 +10,5 @@ export const gameOptions = {
   heroWidth: 80,
   heroHeight: 40,
   distanceFactor: 2,
-  scaleRatio: (window.devicePixelRatio || 1) / 3,
+  scaleRatio: window.devicePixelRatio / 3.5,
 };

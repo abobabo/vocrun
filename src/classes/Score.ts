@@ -22,14 +22,17 @@ class Score {
   constructor(scene, x, y) {
     this.scoreText = new Phaser.GameObjects.BitmapText(
       scene,
-      x,
+      0,
       y,
       'atarisunset',
       `Score: ${String(this.score)}`,
       28,
-    );
-    this.scoreText.setOrigin(1.0);
+    ).setOrigin(1.0, 1.0);
     scene.add.existing(this.scoreText);
+    const widthBeforeScale = this.scoreText.width;
+    this.scoreText.setScale(gameOptions.scaleRatio);
+    const widthAfterScale = this.scoreText.width;
+    this.scoreText.setX(x - (widthBeforeScale - widthAfterScale));
   }
 
   increase = () => {
