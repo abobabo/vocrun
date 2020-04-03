@@ -27,7 +27,8 @@ class VocabContainer extends Phaser.GameObjects.Container {
       vocabStyle,
     )
       .setScale(gameOptions.scaleRatio)
-      .setOrigin(0.5);
+      .setOrigin(0.5)
+      .setWordWrapWidth(scene.vocabContainerWidth);
 
     super(scene, x, y, [vocabSprite, vocabText]);
     this.setSize(width, width);
