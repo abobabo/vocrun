@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+import { gameOptions } from '../config';
 
 const vocabStyle = {
   font: '19px Arial',
@@ -6,8 +7,6 @@ const vocabStyle = {
   align: 'center',
   resolution: 3,
 };
-
-const scaleRatio = (window.devicePixelRatio || 1) / 3;
 
 class VocabContainer extends Phaser.GameObjects.Container {
   constructor(scene, x, y, width, vocab, background) {
@@ -27,7 +26,7 @@ class VocabContainer extends Phaser.GameObjects.Container {
       vocab,
       vocabStyle,
     )
-      .setScale(scaleRatio)
+      .setScale(gameOptions.scaleRatio)
       .setOrigin(0.5);
 
     super(scene, x, y, [vocabSprite, vocabText]);
