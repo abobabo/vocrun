@@ -32,7 +32,7 @@ export const calculateBarriersPerScreen = (
   barrierDistance: number,
   displayHeight: number = gameOptions.height,
 ) => {
-  return Math.floor(displayHeight / (barrierHeight + barrierDistance));
+  return Math.floor(displayHeight / (barrierHeight + barrierDistance)) || 1;
 };
 
 export const calculateVocabContainerHeight = (
