@@ -396,7 +396,7 @@ class GameScene extends Phaser.Scene {
     this.hero = new Hero(
       this,
       gameOptions.width / 2,
-      window.innerHeight - 50,
+      window.innerHeight - 100,
       gameOptions.heroWidth,
       gameOptions.heroHeight,
       '',
