@@ -45,7 +45,7 @@ class LanguageSelection extends Phaser.Scene {
       {
         width: 1,
         height: 2,
-        cellWidth: 30,
+        cellWidth: 0,
         cellHeight: 50,
         x: gameOptions.width / 2,
         y: gameOptions.height / 2 - 100,
