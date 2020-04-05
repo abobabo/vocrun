@@ -67,7 +67,7 @@ class GameScene extends Phaser.Scene {
 
   private jokerEmitter: Phaser.GameObjects.Particles.ParticleEmitter;
 
-  private turnQueue: TurnRoll[] = [];
+  private turnQueue: TurnRoll[];
 
   private heartBar: HeartBar;
 
@@ -386,6 +386,7 @@ class GameScene extends Phaser.Scene {
     }
   };
   public create() {
+    this.turnQueue = [];
     this.barrierSpeed = gameOptions.barrierStartSpeed;
     this.vocabContainerWidth = calculateVocabContainerHeight();
     this.barrierDistance = calculateBarrierDistance(this.vocabContainerWidth);
