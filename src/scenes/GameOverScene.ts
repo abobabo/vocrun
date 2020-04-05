@@ -46,9 +46,6 @@ class GameOverScene extends Phaser.Scene {
   }
 
   public preload() {
-    this.load.image('stones', 'assets/img/stones.png');
-    this.load.image('spoon', 'assets/img/spoon.png');
-    this.load.image('golden turtle', 'assets/img/goldenturtle.png');
     this.load.image('replay button', 'assets/img/replaybutton.png');
     this.load.bitmapFont(
       'atarisunset',
@@ -58,8 +55,13 @@ class GameOverScene extends Phaser.Scene {
   }
 
   public create() {
-    const score = this.add.bitmapText(gameOptions.width / 2, window.innerHeight / 5, 'atarisunset', 
-    `Score: ${String(this.score)}`, 30);
+    const score = this.add.bitmapText(
+      gameOptions.width / 2,
+      window.innerHeight / 5,
+      'atarisunset',
+      `Score: ${String(this.score)}`,
+      30,
+    );
     score.setOrigin(0.5);
     const button = this.add.sprite(
       gameOptions.width / 2,

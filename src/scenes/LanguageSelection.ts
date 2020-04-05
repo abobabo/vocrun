@@ -19,7 +19,6 @@ class LanguageSelection extends Phaser.Scene {
   }
 
   public preload() {
-    this.load.image('vocab', 'assets/img/platform.png');
     this.load.bitmapFont(
       'atarisunset',
       'assets/fonts/atari-sunset.png',
