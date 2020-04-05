@@ -240,7 +240,7 @@ class GameScene extends Phaser.Scene {
   pickContainerSprite = (vocabRoll: VocabRoll) => {
     switch (vocabRoll.type) {
       case ContainerType.VANILLA:
-        return 'vocab';
+        return 'block';
       case ContainerType.JOKER:
         return 'clown';
       case ContainerType.ALL_WRONG:
@@ -363,7 +363,7 @@ class GameScene extends Phaser.Scene {
       frameWidth: 48,
       frameHeight: 48,
     });
-    this.load.image('vocab', 'assets/img/platform.png');
+    this.load.image('block', 'assets/img/block.png');
     this.load.image('heart', 'assets/img/heart.png');
     this.load.image('thunder', 'assets/img/thunder.png');
     this.load.image('clown', 'assets/img/clown.png');
