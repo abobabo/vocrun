@@ -32,7 +32,8 @@ class Score {
     const widthBeforeScale = this.scoreText.width;
     this.scoreText.setScale(gameOptions.scaleRatio);
     const widthAfterScale = this.scoreText.width;
-    this.scoreText.setX(x - (widthBeforeScale - widthAfterScale));
+    this.scoreText.setDisplayOrigin(widthBeforeScale, 0);
+    this.scoreText.setX(x);
   }
 
   increase = () => {

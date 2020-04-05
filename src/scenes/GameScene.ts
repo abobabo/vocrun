@@ -409,7 +409,7 @@ class GameScene extends Phaser.Scene {
       .fillStyle(0x1111222, 1)
       .fillRect(0, 0, gameOptions.width, gameOptions.heartWidth);
     this.heartBar = new HeartBar(this, 0, 0, gameOptions.heartWidth);
-    this.score = new Score(this, gameOptions.width, gameOptions.heartWidth);
+    this.score = new Score(this, gameOptions.width, 0);
 
     this.correctVocabParticles = this.add.particles('correctvocabemit');
     this.correctVocabEmitter = this.correctVocabParticles

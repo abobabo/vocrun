@@ -23,13 +23,4 @@ it('calculate correct barrier distance', () => {
 it('calculate correct barriers per screen', () => {
   expect(calculateBarriersPerScreen(100, 200, 1200)).toBe(4);
 });
-it('calculate correct barriers per screen', () => {
-  console.log(calculateRandomExtraDistance(100));
-  console.log(calculateRandomExtraDistance(100));
-  console.log(calculateRandomExtraDistance(100));
-  console.log(calculateRandomExtraDistance(100));
-  console.log(calculateRandomExtraDistance(100));
-  console.log(calculateRandomExtraDistance(100));
-  console.log(calculateRandomExtraDistance(100));
-  console.log(calculateRandomExtraDistance(100));
-});
+it('calculate correct barriers per screen', () => {});
