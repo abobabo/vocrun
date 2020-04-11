@@ -52,3 +52,7 @@ export const calculateBarrierDistance = (
 export const calculateRandomExtraDistance = (barrierDistance: number) => {
   return Math.floor((Math.random() * barrierDistance) / 2);
 };
+
+export const calculateVocabFontSize = (vocabContainerHeight: number) => {
+  return vocabContainerHeight/5;
+};

@@ -1,15 +1,8 @@
 import * as Phaser from 'phaser';
 import { gameOptions } from '../config';
 
-const vocabStyle = {
-  font: '19px Arial',
-  fill: 'white',
-  align: 'center',
-  resolution: 3,
-};
-
 class VocabContainer extends Phaser.GameObjects.Container {
-  constructor(scene, x, y, width, vocab, background) {
+  constructor(scene, x, y, width, vocab, background, vocabSize) {
     const vocabSprite = new Phaser.Physics.Arcade.Sprite(
       scene,
       0,
@@ -24,7 +17,12 @@ class VocabContainer extends Phaser.GameObjects.Container {
       0,
       0,
       vocab,
-      vocabStyle,
+      {
+        font: `${vocabSize}px Arial`,
+        fill: 'white',
+        align: 'center',
+        resolution: 3,
+      } as any,
     )
       .setScale(gameOptions.scaleRatio)
       .setOrigin(0.5)

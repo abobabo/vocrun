@@ -18,6 +18,7 @@ import {
   calculateBarrierDistance,
   calculateBarriersPerScreen,
   calculateRandomExtraDistance,
+  calculateVocabFontSize
 } from '../helpers';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -88,6 +89,8 @@ class GameScene extends Phaser.Scene {
   private barrierGroup = new Phaser.GameObjects.Group(this);
 
   private vocabulary;
+
+  private vocabFontSize: number; 
 
   constructor() {
     super(sceneConfig);
@@ -189,6 +192,7 @@ class GameScene extends Phaser.Scene {
         this.vocabContainerWidth,
         this.pickContainerText(vocabRoll[i]),
         this.pickContainerSprite(vocabRoll[i]),
+        this.vocabFontSize
       );
       this.physics.world.enable(vocabContainer);
       if (vocabRoll[i].correct) {
@@ -389,6 +393,8 @@ class GameScene extends Phaser.Scene {
     this.turnQueue = [];
     this.barrierSpeed = gameOptions.barrierStartSpeed;
     this.vocabContainerWidth = calculateVocabContainerHeight();
+    this.vocabFontSize = calculateVocabFontSize(this.vocabContainerWidth);
+    console.log(this.vocabContainerWidth);
     this.barrierDistance = calculateBarrierDistance(this.vocabContainerWidth);
     this.barriersPerScreen = calculateBarriersPerScreen(
       this.vocabContainerWidth,
