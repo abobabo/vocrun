@@ -42,7 +42,7 @@
     "cookie-parser": "^1.4.5",
     "copy-webpack-plugin": "^5.1.1",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "phaser": "^3.22.0",
     "ts-loader": "^6.2.1",
     "uuid": "^7.0.2",
